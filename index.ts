@@ -22,4 +22,4 @@ app.get('/', (_, res) => {
     res.send(`Server has started since ${startDate}`)
 })
 
-// API Handling, including methods and JWT using
+// API Handling, including methods and JWT usage
