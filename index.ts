@@ -11,8 +11,8 @@ const PORT = 8080
 const startDate = new Date()
 
 app.listen(PORT, () => {
-    console.log(`Server started at http://localhost:${PORT}`);
-    console.log(`using database url ${process.env.DATABASE_URL}`);
+    console.log(`⚡️[server]: Server started at http://localhost:${PORT}`);
+    console.log(`⚡️[server]: using database url ${process.env.DATABASE_URL}`);
 })
 
 app.use(express.json())
