@@ -4,14 +4,14 @@ import morgan from "morgan";
 import "reflect-metadata";
 
 import { serverConfig } from "./config/server-config";
-import { UserRoute } from "./routes/user-route";
+// import { UserRoute } from "./routes/user-route";
 import { SoapRoute } from "./routes/soap-route";
 
 export class App {
     server: Express;
 
     constructor() {
-        const userRoute = new UserRoute();
+        // const userRoute = new UserRoute();
         const soapRoute = new SoapRoute();
 
         this.server = express();
@@ -21,7 +21,7 @@ export class App {
             express.json(),
             express.urlencoded({ extended: true }),
             morgan("combined"),
-            userRoute.getRoute(),
+            // userRoute.getRoute(),
             soapRoute.getRoute()
         );
     }
@@ -29,7 +29,7 @@ export class App {
     run() {
         this.server.listen(serverConfig.port, () => {
             console.log(`⚡️[server]: Server started at http://localhost:${serverConfig.port}`);
-            console.log(`⚡️[server]: using database url ${process.env.DATABASE_URL}`);
+            console.log(`⚡️[server]: using database url ${serverConfig.db_url}`);
         });
     }
 }
