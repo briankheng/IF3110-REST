@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,39 +7,68 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  username String @unique
-  password String
-  email    String @unique
-  role     Role   @default(USER)
-  coins    Int
-}
-
-model Category {
-  id    Int     @id @default(autoincrement())
-  name  String
-  Video Video[]
-}
-
-model Video {
-  id          Int      @id @default(autoincrement())
-  category    Category @relation(fields: [category_id], references: [id])
-  category_id Int
-  link        String
-  comments    String?  @db.VarChar(255)
-  Album       Album    @relation(fields: [album_id], references: [id])
-  album_id    Int
-}
-
-model Album {
-  id     Int     @id @default(autoincrement())
-  videos Video[]
-  rating Int
-}
-
 enum Role {
   USER
   ADMIN
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  username String    @unique
+  password String
+  role     Role      @default(USER)
+  name     String
+  coins    Int       @default(0)
+  comments Comment[]
+  ratings  Rating[]
+}
+
+model Album {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  thumbnail   String
+  videos      Video[]
+  ratings     Rating[]
+  categories  Category[]
+}
+
+model Video {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  url         String
+  thumbnail   String
+  views       Int       @default(0)
+  album_id    Int
+  comments    Comment[]
+
+  album Album @relation(fields: [album_id], references: [id])
+}
+
+model Rating {
+  id       Int @id @default(autoincrement())
+  rating   Int
+  user_id  Int
+  album_id Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  album Album @relation(fields: [album_id], references: [id])
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  albums Album[]
+}
+
+model Comment {
+  id       Int    @id @default(autoincrement())
+  text     String
+  user_id  Int
+  video_id Int
+
+  user  User  @relation(fields: [user_id], references: [id])
+  video Video @relation(fields: [video_id], references: [id])
 }
