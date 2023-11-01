@@ -1,1 +1,6 @@
-// Contain all utility needed, such like soap-caller, hasher, and cache-handler using redis (bonus)
+import SoapCaller from "./SoapCaller";
+import WrapperErrorHandler from "./WrapperErrorHandler";
+
+export {
+    SoapCaller, WrapperErrorHandler
+}

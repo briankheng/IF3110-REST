@@ -11,17 +11,38 @@ datasource db {
 }
 
 model User {
-  id        Int     @default(autoincrement()) @id
-  email     String  @unique
-  username  String  @unique
-  name      String?
-  posts     Post[]
+  id       Int    @id @default(autoincrement())
+  name     String
+  username String @unique
+  password String
+  email    String @unique
+  role     Role   @default(USER)
+  coins    Int
 }
 
-model Post {
-  id        Int       @default(autoincrement()) @id
-  content   String
-  author    User?     @relation(fields: [authorId], references: [id])
-  authorId  Int?
-  createdAt DateTime  @default(now())
+model Category {
+  id    Int     @id @default(autoincrement())
+  name  String
+  Video Video[]
+}
+
+model Video {
+  id          Int      @id @default(autoincrement())
+  category    Category @relation(fields: [category_id], references: [id])
+  category_id Int
+  link        String
+  comments    String?  @db.VarChar(255)
+  Album       Album    @relation(fields: [album_id], references: [id])
+  album_id    Int
+}
+
+model Album {
+  id     Int     @id @default(autoincrement())
+  videos Video[]
+  rating Int
+}
+
+enum Role {
+  USER
+  ADMIN
 }

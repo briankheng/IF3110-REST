@@ -1,6 +1,7 @@
 require('dotenv').config()
 import express from 'express'
 import cors from 'cors'
+import { KBLSoapClient } from './src/soap-handler'
 import prisma from './src/prisma'  // use prisma as ORM
 
 // Import all handlers from src, including middlewares (to be made soon)
