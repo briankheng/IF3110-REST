@@ -40,7 +40,7 @@ CREATE TABLE "Video" (
 -- CreateTable
 CREATE TABLE "Rating" (
     "id" SERIAL NOT NULL,
-    "rating" INTEGER NOT NULL,
+    "score" INTEGER NOT NULL,
     "user_id" INTEGER NOT NULL,
     "album_id" INTEGER NOT NULL,
 

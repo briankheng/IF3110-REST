@@ -49,7 +49,7 @@ model Video {
 
 model Rating {
   id       Int @id @default(autoincrement())
-  rating   Int
+  score    Int
   user_id  Int
   album_id Int
 
