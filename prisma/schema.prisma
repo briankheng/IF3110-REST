@@ -22,6 +22,7 @@ model User {
   coins    Int       @default(0)
   comments Comment[]
   ratings  Rating[]
+  videos   Video[]
 }
 
 model Album {
@@ -41,8 +42,10 @@ model Video {
   url         String
   thumbnail   String
   views       Int       @default(0)
+  is_premium  Boolean   @default(false)
   album_id    Int
   comments    Comment[]
+  users       User[]
 
   album Album @relation(fields: [album_id], references: [id])
 }

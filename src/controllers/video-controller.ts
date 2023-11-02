@@ -52,6 +52,7 @@ export class VideoController {
           url,
           thumbnail,
           views,
+          is_premium,
           album_id,
         }: IVideoRequest = req.body;
         const video = await prisma.video.create({
@@ -61,6 +62,7 @@ export class VideoController {
             url,
             thumbnail,
             views,
+            is_premium,
             album_id,
           },
         });
@@ -83,6 +85,7 @@ export class VideoController {
           url,
           thumbnail,
           views,
+          is_premium,
           album_id,
         }: IVideoRequest = req.body;
         const video = await prisma.video.update({
@@ -95,6 +98,7 @@ export class VideoController {
             url,
             thumbnail,
             views,
+            is_premium,
             album_id,
           },
         });

@@ -6,6 +6,10 @@ export interface IAuthToken {
   isAdmin: boolean;
 }
 
+export interface IAuthRequest extends Request {
+  token: IAuthToken;
+}
+
 // Subscription Interface
 export interface ISubscriptionRequest {
   userID: number;
@@ -17,10 +21,6 @@ export interface ISubscriptionData {
   albumID: number;
   userName: string;
   albumName: string;
-}
-
-export interface IAuthRequest extends Request {
-  token: IAuthToken;
 }
 
 // Album Interface
@@ -56,6 +56,7 @@ export interface IVideoRequest {
   url: string;
   thumbnail: string;
   views: number;
+  is_premium: boolean;
   album_id: number;
 }
 
