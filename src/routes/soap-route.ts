@@ -15,7 +15,7 @@ export class SoapRoute {
         this.soapMiddleware = new SoapMiddleware();
     }
 
-    getRoute() {
+    getRoutes() {
         return Router()
             .post("/subscribe/accept",
                 this.authenticationMiddleware.authenticate(),
