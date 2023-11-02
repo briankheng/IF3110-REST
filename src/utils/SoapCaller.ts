@@ -15,12 +15,16 @@ class SoapCaller {
     public async call(method: string, params?: Object) {
         const headers: Header = {
             'Content-Type': 'text/xml;charset=UTF-8',
-            SOAPAction: '#POST',
-            'api-key': process.env.SOAP_API_KEY,
+            'api-key': process.env.SOAP_API_KEY
         }
 
+        console.log(headers);
+
         const xml = this.buildXMLRequest(method, params)
+        console.log(xml);
+        console.log(this.url);
         const response = await axios.post(this.url, xml, { headers })
+        console.log(response);
         const data = response.data;
 
         // Parse the XML
@@ -59,12 +63,11 @@ class SoapCaller {
         return `
         <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
             <Body>
-                <${method} xmlns="http://ws/">
+                <${method} xmlns="http://webservices/">
                     ${strParams}
                 </${method}>
             </Body>
-        </Envelope>
-        `
+        </Envelope>`
     }
 
     private buildXMLParams(params?: Object) {

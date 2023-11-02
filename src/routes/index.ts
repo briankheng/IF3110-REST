@@ -4,6 +4,7 @@ import { CategoryRoute } from "./category-route";
 import { CommentRoute } from "./comment-route";
 import { RatingRoute } from "./rating-route";
 import { SoapRoute } from "./soap-route";
+import { UserRoute } from "./user-route";
 
 export {
   AlbumRoute,
@@ -12,4 +13,5 @@ export {
   CommentRoute,
   RatingRoute,
   SoapRoute,
+  UserRoute
 };

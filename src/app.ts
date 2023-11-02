@@ -13,13 +13,14 @@ import {
   CommentRoute,
   RatingRoute,
   SoapRoute,
+  UserRoute
 } from "./routes";
 
 export class App {
   server: Express;
 
   constructor() {
-    // const userRoute = new UserRoute();
+    const userRoute = new UserRoute();
     const albumRoute = new AlbumRoute();
     const videoRoute = new VideoRoute();
     const categoryRoute = new CategoryRoute();
@@ -36,7 +37,7 @@ export class App {
       express.json(),
       express.urlencoded({ extended: true }),
       morgan("combined"),
-      // userRoute.getRoutes(),
+      userRoute.getRoutes(),
       albumRoute.getRoutes(),
       videoRoute.getRoutes(),
       categoryRoute.getRoutes(),
