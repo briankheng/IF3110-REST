@@ -1,12 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import prisma from "../prisma";
 
-interface IAlbumRequest {
-  title: string;
-  description: string;
-  thumbnail: string;
-}
+import { IAlbumRequest } from "../interfaces";
+import prisma from "../prisma";
 
 export class AlbumController {
   index() {

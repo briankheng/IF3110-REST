@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 import express, { Express } from "express";
 import cors from "cors";
 import morgan from "morgan";
@@ -49,7 +51,9 @@ export class App {
       console.log(
         `⚡️[server]: Server started at http://localhost:${serverConfig.port}`
       );
-      console.log(`⚡️[server]: using database url ${serverConfig.db_url}`);
+      console.log(
+        `⚡️[server]: using database url ${process.env.DATABASE_URL}`
+      );
     });
   }
 }

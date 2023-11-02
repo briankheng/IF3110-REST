@@ -1,20 +1,43 @@
 import { Router } from "express";
 
-import { CategoryController } from "../controllers/category-controller";
+import { AuthenticationMiddleware } from "../middlewares";
+import { CategoryController } from "../controllers";
 
 export class CategoryRoute {
+  authenticationMiddleware: AuthenticationMiddleware;
   categoryController: CategoryController;
 
   constructor() {
+    this.authenticationMiddleware = new AuthenticationMiddleware();
     this.categoryController = new CategoryController();
   }
 
   getRoutes() {
     return Router()
-      .get("/category", this.categoryController.index())
-      .get("/category/:id", this.categoryController.show())
-      .post("/category", this.categoryController.store())
-      .put("/category/:id", this.categoryController.update())
-      .delete("/category/:id", this.categoryController.destroy());
+      .get(
+        "/category",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.index()
+      )
+      .get(
+        "/category/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.show()
+      )
+      .post(
+        "/category",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.store()
+      )
+      .put(
+        "/category/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.update()
+      )
+      .delete(
+        "/category/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.destroy()
+      );
   }
 }

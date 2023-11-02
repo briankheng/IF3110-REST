@@ -1,12 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import prisma from "../prisma";
 
-interface ICommentRequest {
-  text: string;
-  user_id: number;
-  video_id: number;
-}
+import { ICommentRequest } from "../interfaces";
+import prisma from "../prisma";
 
 export class CommentController {
   index() {

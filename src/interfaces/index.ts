@@ -1,12 +1,66 @@
-import { Request, Response } from 'express';
+import { Request } from "express";
 
-export type handlerType = (
-    req: Request,
-    res: Response,
-) => Promise<Response<any, Record<string, any>>>;
+// Authentication Interface
+export interface IAuthToken {
+  userID: number;
+  isAdmin: boolean;
+}
 
-export interface ISubscription {
-    userId: number;
-    albumId: number;
-    status: string;
+// Subscription Interface
+export interface ISubscriptionRequest {
+  userID: number;
+  albumID: number;
+}
+
+export interface ISubscriptionData {
+  userID: number;
+  albumID: number;
+  userName: string;
+  albumName: string;
+}
+
+export interface IAuthRequest extends Request {
+  token: IAuthToken;
+}
+
+// Album Interface
+export interface IAlbumRequest {
+  title: string;
+  description: string;
+  thumbnail: string;
+}
+
+// Category Interface
+export interface ICategoryRequest {
+  name: string;
+}
+
+// Comment Interface
+export interface ICommentRequest {
+  text: string;
+  user_id: number;
+  video_id: number;
+}
+
+// Rating Interface
+export interface IRatingRequest {
+  score: number;
+  user_id: number;
+  album_id: number;
+}
+
+// Video Interface
+export interface IVideoRequest {
+  title: string;
+  description: string;
+  url: string;
+  thumbnail: string;
+  views: number;
+  album_id: number;
+}
+
+// SOAP Interface
+export interface IValidateRequest {
+  userID: number;
+  albumID: number;
 }

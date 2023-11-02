@@ -1,20 +1,43 @@
 import { Router } from "express";
 
-import { AlbumController } from "../controllers/album-controller";
+import { AuthenticationMiddleware } from "../middlewares";
+import { AlbumController } from "../controllers";
 
 export class AlbumRoute {
+  authenticationMiddleware: AuthenticationMiddleware;
   albumController: AlbumController;
 
   constructor() {
+    this.authenticationMiddleware = new AuthenticationMiddleware();
     this.albumController = new AlbumController();
   }
 
   getRoutes() {
     return Router()
-      .get("/album", this.albumController.index())
-      .get("/album/:id", this.albumController.show())
-      .post("/album", this.albumController.store())
-      .put("/album/:id", this.albumController.update())
-      .delete("/album/:id", this.albumController.destroy());
+      .get(
+        "/album",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.index()
+      )
+      .get(
+        "/album/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.show()
+      )
+      .post(
+        "/album",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.store()
+      )
+      .put(
+        "/album/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.update()
+      )
+      .delete(
+        "/album/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.destroy()
+      );
   }
 }

@@ -1,10 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import prisma from "../prisma";
 
-interface ICategoryRequest {
-  name: string;
-}
+import { ICategoryRequest } from "../interfaces";
+import prisma from "../prisma";
 
 export class CategoryController {
   index() {

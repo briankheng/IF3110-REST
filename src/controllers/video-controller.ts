@@ -1,15 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import prisma from "../prisma";
 
-interface IVideoRequest {
-  title: string;
-  description: string;
-  url: string;
-  thumbnail: string;
-  views: number;
-  album_id: number;
-}
+import { IVideoRequest } from "../interfaces";
+import prisma from "../prisma";
 
 export class VideoController {
   index() {

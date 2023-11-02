@@ -1,12 +1,8 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
 import { Request, Response } from "express";
-import prisma from "../prisma";
 
-interface IRatingRequest {
-  score: number;
-  user_id: number;
-  album_id: number;
-}
+import { IRatingRequest } from "../interfaces";
+import prisma from "../prisma";
 
 export class RatingController {
   index() {

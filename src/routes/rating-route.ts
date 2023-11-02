@@ -1,20 +1,43 @@
 import { Router } from "express";
 
-import { RatingController } from "../controllers/rating-controller";
+import { AuthenticationMiddleware } from "../middlewares";
+import { RatingController } from "../controllers";
 
 export class RatingRoute {
+  authenticationMiddleware: AuthenticationMiddleware;
   ratingController: RatingController;
 
   constructor() {
+    this.authenticationMiddleware = new AuthenticationMiddleware();
     this.ratingController = new RatingController();
   }
 
   getRoutes() {
     return Router()
-      .get("/rating", this.ratingController.index())
-      .get("/rating/:id", this.ratingController.show())
-      .post("/rating", this.ratingController.store())
-      .put("/rating/:id", this.ratingController.update())
-      .delete("/rating/:id", this.ratingController.destroy());
+      .get(
+        "/rating",
+        this.authenticationMiddleware.authenticate(),
+        this.ratingController.index()
+      )
+      .get(
+        "/rating/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.ratingController.show()
+      )
+      .post(
+        "/rating",
+        this.authenticationMiddleware.authenticate(),
+        this.ratingController.store()
+      )
+      .put(
+        "/rating/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.ratingController.update()
+      )
+      .delete(
+        "/rating/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.ratingController.destroy()
+      );
   }
 }
