@@ -2,7 +2,7 @@ import { Request } from "express";
 
 // Authentication Interface
 export interface IAuthToken {
-  userID: number;
+  id: number;
   isAdmin: boolean;
 }
 

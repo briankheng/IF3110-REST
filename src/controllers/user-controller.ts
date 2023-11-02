@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 
-import { AuthToken, AuthRequest } from "../middlewares/authentication-middleware";
+import { IAuthRequest, IAuthToken } from "../interfaces";
 import { jwtConfig } from "../config/jwt-config";
 import { Hasher } from "../utils";
 import prisma from '../prisma';
@@ -58,7 +58,7 @@ export class UserController {
 
             const { id, role } = user;
             const isAdmin = role === "ADMIN";
-            const payload: AuthToken = { id, isAdmin };
+            const payload: IAuthToken = { id, isAdmin };
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn,
             });
@@ -119,7 +119,7 @@ export class UserController {
 
             const { id, role } = newUser;
             const isAdmin = role === "ADMIN";
-            const payload: AuthToken = { id, isAdmin };
+            const payload: IAuthToken = { id, isAdmin };
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn,
             });
@@ -160,7 +160,7 @@ export class UserController {
 
     check() {
         return async (req: Request, res: Response) => {
-            const { token } = req as AuthRequest;
+            const { token } = req as IAuthRequest;
             if (!token) {
                 res.status(StatusCodes.UNAUTHORIZED).json({
                     message: ReasonPhrases.UNAUTHORIZED,
