@@ -53,6 +53,7 @@ export class SoapController {
       const args = {
         arg0: userID,
         arg1: albumID,
+        arg2: req.ip
       };
 
       try {
@@ -83,6 +84,7 @@ export class SoapController {
       const args = {
         arg0: userID,
         arg1: albumID,
+        arg2: req.ip
       };
 
       try {
