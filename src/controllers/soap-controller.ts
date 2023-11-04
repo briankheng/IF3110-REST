@@ -17,24 +17,17 @@ export class SoapController {
 
     request() {
         return async (req: Request, res: Response) => {
-            /* const { token } = req as AuthRequest;
-            if (!token) {
-                res.status(StatusCodes.UNAUTHORIZED).json({
-                    message: ReasonPhrases.UNAUTHORIZED,
-                });
-                return;
-            } */
-
             // Parse request body
             const { userID, albumID }: ISubscriptionRequest = req.body;
             const args = {
                 arg0: userID,
                 arg1: albumID,
+                arg2: req.ip
             }
 
             try {
                 const response = await this.soapCaller.call('subscribe', args);
-                console.log(response);
+                res.status(StatusCodes.CREATED).json(response);
             } catch (error) {
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                     message: ReasonPhrases.INTERNAL_SERVER_ERROR,
@@ -64,6 +57,7 @@ export class SoapController {
 
       try {
         const response = await this.soapCaller.call("acceptSubscription", args);
+        res.status(StatusCodes.OK).json(response);
       } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,
@@ -93,6 +87,7 @@ export class SoapController {
 
       try {
         const response = await this.soapCaller.call("rejectSubscription", args);
+        res.status(StatusCodes.OK).json(response);
       } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,
@@ -126,6 +121,7 @@ export class SoapController {
                 }); */
 
         console.log(response);
+        res.status(StatusCodes.OK).json(response);
       } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,

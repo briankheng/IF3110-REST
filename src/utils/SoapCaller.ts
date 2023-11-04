@@ -6,36 +6,52 @@ type Header = {
 }
 
 class SoapCaller {
-    private url: string
+    private url: string;
 
     constructor(url: string) {
-        this.url = url
+        this.url = url;
     }
 
-    public async call(method: string, params?: Object) {
+    public async call(method: string, params?: Record<string, any>) {
         const headers: Header = {
-            'Content-Type': 'text/xml;charset=UTF-8',
-            'api-key': process.env.SOAP_API_KEY
+            "Content-Type": "text/xml",
+            "api-key": process.env.SOAP_API_KEY,
+        };
+
+        const updatedUrl = this.url.replace('localhost', '127.0.0.1');
+
+        console.log("Request Headers:", headers);
+
+        const xml = this.buildXMLRequest(method, params);
+        console.log("SOAP Request XML:", xml);
+        console.log("SOAP Service URL:", updatedUrl);
+        console.log("SOAP_API_KEY:", process.env.SOAP_API_KEY);
+
+        try {
+            const response = await axios.post<string>(updatedUrl, xml, { headers });
+
+            console.log("SOAP Response Status:", response.status);
+            console.log("SOAP Response Headers:", response.headers);
+            console.log("SOAP Response Data:", response.data);
+
+            const data = response.data;
+
+            // Parse the XML
+            const json = JSON.parse(converter.xml2json(data, { compact: true, spaces: 4 }));
+            const returnVal = json['S:Envelope']['S:Body']['ns2:' + method + 'Response']['return'];
+
+            if (!returnVal) {
+                return null;
+            }
+
+            console.log("Retval:", returnVal);
+            console.log("JSON Resp:", this.buildResponseJSON(returnVal));
+
+            return this.buildResponseJSON(returnVal);
+        } catch (error) {
+            console.error("SOAP Request Error:", error);
+            throw error; // Rethrow the error for the calling code to handle if needed
         }
-
-        console.log(headers);
-
-        const xml = this.buildXMLRequest(method, params)
-        console.log(xml);
-        console.log(this.url);
-        const response = await axios.post(this.url, xml, { headers })
-        console.log(response);
-        const data = response.data;
-
-        // Parse the XML
-        const json = JSON.parse(converter.xml2json(data, { compact: true, spaces: 4 }))
-        const returnVal = json['S:Envelope']['S:Body']['ns2:' + method + 'Response']['return']
-
-        if (!returnVal) {
-            return null
-        }
-
-        return this.buildResponseJSON(returnVal)
     }
 
     private buildResponseJSON(json: JSON) {

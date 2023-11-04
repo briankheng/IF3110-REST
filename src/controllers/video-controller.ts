@@ -62,7 +62,7 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            is_premium,
+            // is_premium,
             album_id,
           },
         });
@@ -98,7 +98,7 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            is_premium,
+            // is_premium,
             album_id,
           },
         });

@@ -29,9 +29,13 @@ export class App {
     const soapRoute = new SoapRoute();
 
     this.server = express();
-    this.server.use(
-      (cors as (options: cors.CorsOptions) => express.RequestHandler)({})
-    );
+    // this.server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)({}));
+    cors({
+      origin: 'http://localhost:3003', // Replace with your allowed domain
+      methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed HTTP methods
+      allowedHeaders: ['Content-Type', 'Authorization', 'api-key'], // Specify allowed headers
+      credentials: true, // Allow credentials (cookies, HTTP authentication)
+    })
     this.server.use(
       "/api",
       express.json(),
@@ -49,12 +53,8 @@ export class App {
 
   run() {
     this.server.listen(serverConfig.port, () => {
-      console.log(
-        `⚡️[server]: Server started at http://localhost:${serverConfig.port}`
-      );
-      console.log(
-        `⚡️[server]: using database url ${process.env.DATABASE_URL}`
-      );
+      console.log(`⚡️[server]: Server started at http://localhost:${serverConfig.port}`);
+      console.log(`⚡️[server]: using database url ${process.env.DATABASE_URL}`);
     });
   }
 }
