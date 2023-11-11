@@ -1,13 +1,10 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'USER',
+    "is_admin" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT NOT NULL,
     "coins" INTEGER NOT NULL DEFAULT 0,
 
@@ -32,6 +29,7 @@ CREATE TABLE "Video" (
     "url" TEXT NOT NULL,
     "thumbnail" TEXT NOT NULL,
     "views" INTEGER NOT NULL DEFAULT 0,
+    "is_premium" BOOLEAN NOT NULL DEFAULT false,
     "album_id" INTEGER NOT NULL,
 
     CONSTRAINT "Video_pkey" PRIMARY KEY ("id")
@@ -66,6 +64,12 @@ CREATE TABLE "Comment" (
 );
 
 -- CreateTable
+CREATE TABLE "_UserToVideo" (
+    "A" INTEGER NOT NULL,
+    "B" INTEGER NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "_AlbumToCategory" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
@@ -76,6 +80,12 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_UserToVideo_AB_unique" ON "_UserToVideo"("A", "B");
+
+-- CreateIndex
+CREATE INDEX "_UserToVideo_B_index" ON "_UserToVideo"("B");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_AlbumToCategory_AB_unique" ON "_AlbumToCategory"("A", "B");
@@ -97,6 +107,12 @@ ALTER TABLE "Comment" ADD CONSTRAINT "Comment_user_id_fkey" FOREIGN KEY ("user_i
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_video_id_fkey" FOREIGN KEY ("video_id") REFERENCES "Video"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToVideo" ADD CONSTRAINT "_UserToVideo_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_UserToVideo" ADD CONSTRAINT "_UserToVideo_B_fkey" FOREIGN KEY ("B") REFERENCES "Video"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_AlbumToCategory" ADD CONSTRAINT "_AlbumToCategory_A_fkey" FOREIGN KEY ("A") REFERENCES "Album"("id") ON DELETE CASCADE ON UPDATE CASCADE;

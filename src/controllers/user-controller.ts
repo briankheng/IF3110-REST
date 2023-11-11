@@ -35,7 +35,7 @@ export class UserController {
                 select: {
                     id: true,
                     password: true,
-                    role: true,
+                    is_admin: true,
                 },
                 where: {
                     username: username,
@@ -57,9 +57,8 @@ export class UserController {
                 return;
             }
 
-            const { id, role } = user;
-            const isAdmin = role === "ADMIN";
-            const payload: IAuthToken = { id, isAdmin };
+            const { id, is_admin } = user;
+            const payload: IAuthToken = { id, isAdmin: is_admin };
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn,
             });
@@ -107,7 +106,7 @@ export class UserController {
                     username,
                     name,
                     password: hashedPassword,
-                    role: "USER",
+                    is_admin: false,
                 },
             });
 
@@ -118,9 +117,8 @@ export class UserController {
                 return;
             }
 
-            const { id, role } = newUser;
-            const isAdmin = role === "ADMIN";
-            const payload: IAuthToken = { id, isAdmin };
+            const { id, is_admin } = newUser;
+            const payload: IAuthToken = { id, isAdmin: is_admin };
             const token = jwt.sign(payload, jwtConfig.secret, {
                 expiresIn: jwtConfig.expiresIn,
             });
@@ -136,7 +134,7 @@ export class UserController {
         return async (req: Request, res: Response) => {
             const users = await prisma.user.findMany({
                 select: { id: true, name: true },
-                where: { role: "USER" }, 
+                where: { is_admin: false }, 
             });
 
             res.status(StatusCodes.OK).json({
@@ -149,7 +147,7 @@ export class UserController {
     admin() {
         return async (req: Request, res: Response) => {
             const admin = await prisma.user.findFirst({
-                where: { role: "ADMIN" },
+                where: { is_admin: true },
             });
 
             res.status(StatusCodes.OK).json({
