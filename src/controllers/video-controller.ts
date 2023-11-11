@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { IVideoRequest } from "../interfaces";
 import prisma from "../prisma";
+import { SoapCaller } from "../utils";
 
 export class VideoController {
   index() {
@@ -127,5 +128,42 @@ export class VideoController {
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
     };
+  }
+
+  dummynotify() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.body;
+        const video = await this.notify(id, req.ip);
+        res.status(StatusCodes.OK).json(video);
+      } catch (error) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
+  async notify (albumID : string, IPs: string | undefined) {
+    // Check if IPs is defined before using it
+    if (IPs === undefined) {
+      throw new Error('IP address is undefined');
+    }
+
+    const args = {
+      arg0: parseInt(albumID),
+      arg1: "1:23::11"
+    };
+
+    // Create soapCaller
+    const soapCaller = new SoapCaller(process.env.SOAP_URL ? process.env.SOAP_URL : "");
+
+    try {
+      const response = await soapCaller.call('notifySubscriber', args);
+      return response; // Return the response from the SOAP call
+    } catch (error) {
+      console.error(error);
+      throw error; // Rethrow the error to be caught in the outer catch block
+    }
   }
 }

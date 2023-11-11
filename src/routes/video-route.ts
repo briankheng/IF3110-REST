@@ -38,6 +38,10 @@ export class VideoRoute {
         "/video/:id",
         this.authenticationMiddleware.authenticate(),
         this.videoController.destroy()
+      )
+      .post(
+        "/video/notify",
+        this.videoController.dummynotify()
       );
   }
 }

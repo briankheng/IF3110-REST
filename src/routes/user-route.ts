@@ -25,5 +25,7 @@ export class UserRoute {
                 this.userController.check())
             .get("/user/admin",
                 this.userController.admin())
+            .get("/user/emails",
+                this.userController.getEmailsByIds())
     }
 }

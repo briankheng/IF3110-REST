@@ -7,6 +7,7 @@ import { IAuthRequest, IAuthToken } from "../interfaces";
 import { jwtConfig } from "../config/jwt-config";
 import { Hasher } from "../utils";
 import prisma from '../prisma';
+import url from "url";
 
 interface TokenRequest {
     username: string;
@@ -173,5 +174,47 @@ export class UserController {
                 isAdmin: token.isAdmin,
             });
         }
+    }
+
+    getEmailsByIds() {
+        return async (req: Request, res: Response) => {
+            const parsedUrl = url.parse(req.url, true);
+            const queryParams = parsedUrl.query;
+            const userIds = queryParams.userIds;
+
+            // Check if userIds is not present or not an array
+            if (userIds === undefined || typeof userIds !== 'string') {
+                res.status(StatusCodes.BAD_REQUEST).json({
+                    message: ReasonPhrases.BAD_REQUEST,
+                });
+                return;
+            }
+
+            try {
+                // Convert userIds to an array of strings
+                const userIdsArray = userIds.split(",");
+                console.log(userIdsArray);
+
+                // Query the database to get user emails by ids
+                const users = await prisma.user.findMany({
+                    select: { id: true, email: true },
+                    where: { id: { in: userIdsArray.map(id => parseInt(id, 10)) } },
+                });
+
+                // Extract emails from the database result
+                const emails = users.map((user) => user.email);
+
+                res.status(StatusCodes.OK).json({
+                    message: ReasonPhrases.OK,
+                    data: emails,
+                });
+
+            } catch (error) {
+                console.error(error);
+                res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                    message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+                });
+            }
+        };
     }
 }
