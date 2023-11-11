@@ -1,9 +1,9 @@
-import axios from 'axios'
-import converter from 'xml-js'
+import axios from 'axios';
+import converter from 'xml-js';
 
 type Header = {
-    [key: string]: string | undefined
-}
+    [key: string]: string | undefined;
+};
 
 class SoapCaller {
     private url: string;
@@ -14,25 +14,25 @@ class SoapCaller {
 
     public async call(method: string, params?: Record<string, any>) {
         const headers: Header = {
-            "Content-Type": "text/xml",
-            "api-key": process.env.SOAP_API_KEY,
+            'Content-Type': 'text/xml',
+            'api-key': process.env.SOAP_API_KEY,
         };
 
         const updatedUrl = this.url.replace('localhost', '127.0.0.1');
 
-        console.log("Request Headers:", headers);
+        console.log('Request Headers:', headers);
 
         const xml = this.buildXMLRequest(method, params);
-        console.log("SOAP Request XML:", xml);
-        console.log("SOAP Service URL:", updatedUrl);
-        console.log("SOAP_API_KEY:", process.env.SOAP_API_KEY);
+        console.log('SOAP Request XML:', xml);
+        console.log('SOAP Service URL:', updatedUrl);
+        console.log('SOAP_API_KEY:', process.env.SOAP_API_KEY);
 
         try {
-            const response = await axios.post<string>(updatedUrl, xml, { headers });
+            const response = await axios.post(updatedUrl, xml, { headers });
 
-            console.log("SOAP Response Status:", response.status);
-            console.log("SOAP Response Headers:", response.headers);
-            console.log("SOAP Response Data:", response.data);
+            console.log('SOAP Response Status:', response.status);
+            console.log('SOAP Response Headers:', response.headers);
+            console.log('SOAP Response Data:', response.data);
 
             const data = response.data;
 
@@ -44,37 +44,37 @@ class SoapCaller {
                 return null;
             }
 
-            console.log("Retval:", returnVal);
-            console.log("JSON Resp:", this.buildResponseJSON(returnVal));
+            console.log('Retval:', returnVal);
+            console.log('JSON Resp:', this.buildResponseJSON(returnVal));
 
             return this.buildResponseJSON(returnVal);
         } catch (error) {
-            console.error("SOAP Request Error:", error);
+            console.error('SOAP Request Error:', error);
             throw error; // Rethrow the error for the calling code to handle if needed
         }
     }
 
     private buildResponseJSON(json: JSON) {
         if (Array.isArray(json)) {
-            return json.map((item) => this.flatten(item))
+            return json.map((item) => this.flatten(item));
         }
 
-        return this.flatten(json)
+        return this.flatten(json);
     }
 
     private flatten(json: JSON): JSON {
-        const response: any = {}
+        const response: any = {};
 
         Object.keys(json).forEach((key) => {
-            const value = json[key as keyof typeof json]
-            response[key] = value['_text' as keyof typeof value]
-        })
+            const value = json[key as keyof typeof json];
+            response[key] = value['_text' as keyof typeof value];
+        });
 
-        return response
+        return response;
     }
 
     private buildXMLRequest(method: string, params?: Object) {
-        const strParams = this.buildXMLParams(params)
+        const strParams = this.buildXMLParams(params);
 
         return `
         <Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/">
@@ -83,20 +83,20 @@ class SoapCaller {
                     ${strParams}
                 </${method}>
             </Body>
-        </Envelope>`
+        </Envelope>`;
     }
 
     private buildXMLParams(params?: Object) {
         if (!params) {
-            return ''
+            return '';
         }
 
         const keyValue = Object.keys(params).map((key) => {
-            return `<${key} xmlns="">${params[key as keyof typeof params]}</${key}>`
-        })
+            return `<${key} xmlns="">${params[key as keyof typeof params]}</${key}>`;
+        });
 
-        return keyValue.join('')
+        return keyValue.join('');
     }
 }
 
-export default SoapCaller
+export default SoapCaller;

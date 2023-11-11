@@ -54,7 +54,7 @@ export class App {
   run() {
     this.server.listen(serverConfig.port, () => {
       console.log(`⚡️[server]: Server started at http://localhost:${serverConfig.port}`);
-      console.log(`⚡️[server]: using database url ${process.env.DATABASE_URL}`);
+      console.log(`⚡️[server]: using database url ${process.env.USE_DOCKER_CONFIG ? process.env.DATABASE_URL_DOCKER : process.env.DATABASE_URL}`);
     });
   }
 }
