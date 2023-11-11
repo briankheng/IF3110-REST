@@ -133,8 +133,8 @@ export class VideoController {
   dummynotify() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.body;
-        const video = await this.notify(id, req.ip);
+        const { id, album_name } = req.body;
+        const video = await this.notify(id, album_name, req.ip);
         res.status(StatusCodes.OK).json(video);
       } catch (error) {
         res
@@ -144,7 +144,7 @@ export class VideoController {
     };
   }
 
-  async notify (albumID : string, IPs: string | undefined) {
+  async notify (albumID : string, album_name : string, IPs: string | undefined) {
     // Check if IPs is defined before using it
     if (IPs === undefined) {
       throw new Error('IP address is undefined');
@@ -152,7 +152,8 @@ export class VideoController {
 
     const args = {
       arg0: parseInt(albumID),
-      arg1: "1:23::11"
+      arg1: album_name,
+      arg2: "1:23::11"
     };
 
     // Create soapCaller
