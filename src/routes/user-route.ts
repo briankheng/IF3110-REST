@@ -16,8 +16,6 @@ export class UserRoute {
         return Router()
             .post("/user/token", 
                 this.userController.token())
-            .post("/user", 
-                this.userController.store())
             .get("/user", 
                 this.userController.index())
             .get("/user/check", 
@@ -27,5 +25,12 @@ export class UserRoute {
                 this.userController.admin())
             .get("/user/emails",
                 this.userController.getEmailsByIds())
+            .get("/user/me",
+                this.authenticationMiddleware.authenticate(),
+                this.userController.me())
+            .post("/login",
+                this.userController.token())
+            .post("/register",
+                this.userController.store())
     }
 }

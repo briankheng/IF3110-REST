@@ -30,12 +30,13 @@ export class App {
 
     this.server = express();
     // this.server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)({}));
-    cors({
-      origin: 'http://localhost:3003', // Replace with your allowed domain
-      methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed HTTP methods
-      allowedHeaders: ['Content-Type', 'Authorization', 'api-key'], // Specify allowed headers
-      credentials: true, // Allow credentials (cookies, HTTP authentication)
-    })
+    // cors({
+    //   origin: '*', // Replace with your allowed domain
+    //   methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed HTTP methods
+    //   allowedHeaders: ['Content-Type', 'Authorization', 'api-key'], // Specify allowed headers
+    //   credentials: true, // Allow credentials (cookies, HTTP authentication)
+    // })
+    this.server.use(cors());
     this.server.use(
       "/api",
       express.json(),
