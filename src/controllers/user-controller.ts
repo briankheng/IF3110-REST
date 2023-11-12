@@ -72,58 +72,63 @@ export class UserController {
 
   store() {
     return async (req: Request, res: Response) => {
-      const { email, username, name, password }: IUserRequest = req.body;
-      if (!email || !username || !name || !password) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
+      try {
+        const { email, username, name, password }: IUserRequest = req.body;
+        if (!email || !username || !name || !password) {
+          throw res.status(StatusCodes.BAD_REQUEST).json({
+            message: ReasonPhrases.BAD_REQUEST,
+          });
+        }
+
+        const existingUserWithUsername = await prisma.user.findFirst({
+          where: { username },
+        });
+
+        if (existingUserWithUsername) {
+          throw res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Username already taken!",
+          });
+        }
+
+        const existingUserWithEmail = await prisma.user.findFirst({
+          where: { email },
+        });
+
+        if (existingUserWithEmail) {
+          throw res.status(StatusCodes.BAD_REQUEST).json({
+            message: "Email already taken!",
+          });
+        }
+
+        const hashedPassword = await Hasher(password);
+        const newUser = await prisma.user.create({
+          data: {
+            email,
+            username,
+            name,
+            password: hashedPassword,
+            is_admin: false,
+          },
+        });
+
+        if (!newUser) {
+          throw res.status(StatusCodes.BAD_REQUEST).json({
+            message: ReasonPhrases.BAD_REQUEST,
+          });
+        }
+
+        const { id, is_admin } = newUser;
+        const payload: IAuthToken = { id, isAdmin: is_admin };
+        const token = jwt.sign(payload, jwtConfig.secret, {
+          expiresIn: jwtConfig.expiresIn,
+        });
+
+        return res.status(StatusCodes.CREATED).json(token);
+      } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
         });
       }
-
-      const existingUserWithUsername = await prisma.user.findFirst({
-        where: { username },
-      });
-
-      if (existingUserWithUsername) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-          message: "Username already taken!",
-        });
-      }
-
-      const existingUserWithEmail = await prisma.user.findFirst({
-        where: { email },
-      });
-
-      if (existingUserWithEmail) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-          message: "Email already taken!",
-        });
-      }
-
-      const hashedPassword = await Hasher(password);
-      const newUser = await prisma.user.create({
-        data: {
-          email,
-          username,
-          name,
-          password: hashedPassword,
-          is_admin: false,
-        },
-      });
-
-      if (!newUser) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
-        });
-        return;
-      }
-
-      const { id, is_admin } = newUser;
-      const payload: IAuthToken = { id, isAdmin: is_admin };
-      const token = jwt.sign(payload, jwtConfig.secret, {
-        expiresIn: jwtConfig.expiresIn,
-      });
-
-      res.status(StatusCodes.CREATED).json(token);
     };
   }
 
