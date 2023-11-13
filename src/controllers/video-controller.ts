@@ -178,7 +178,7 @@ export class VideoController {
     const args = {
       arg0: parseInt(albumID),
       arg1: album_name,
-      arg2: "1:23::11"
+      arg2: IPs
     };
 
     // Create soapCaller
