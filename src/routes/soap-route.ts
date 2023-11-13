@@ -9,7 +9,7 @@ export class SoapRoute {
 
     constructor() {
         this.authenticationMiddleware = new AuthenticationMiddleware();
-        this.soapController = new SoapController(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER || '' : process.env.SOAP_URL || '');
+        this.soapController = new SoapController(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER + "/subscription" || '' : process.env.SOAP_URL + "/subscription" || '');
     }
 
     getRoutes() {
