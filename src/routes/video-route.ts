@@ -24,6 +24,11 @@ export class VideoRoute {
         this.authenticationMiddleware.authenticate(),
         this.videoController.show()
       )
+      .get(
+        "/video/search",
+        this.authenticationMiddleware.authenticate(),
+        this.videoController.search()
+      )
       .post(
         "/video",
         this.authenticationMiddleware.authenticate(),

@@ -144,6 +144,31 @@ export class VideoController {
     };
   }
 
+  // Search video based on title
+  search() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { title } = req.query;
+        const videos = await prisma.video.findMany({
+          where: {
+            title: {
+              contains: title,
+              mode: 'insensitive', // makes the search case insensitive
+            },
+          },
+          include: {
+            comments: true,
+          },
+        });
+        res.status(StatusCodes.OK).json(videos);
+      } catch (error) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
   async notify (albumID : string, album_name : string, IPs: string | undefined) {
     // Check if IPs is defined before using it
     if (IPs === undefined) {
