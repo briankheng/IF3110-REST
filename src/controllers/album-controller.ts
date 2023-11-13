@@ -108,4 +108,30 @@ export class AlbumController {
       }
     };
   }
+
+  search() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { title } = req.query;
+        const albums = await prisma.album.findMany({
+          where: {
+            title: {
+              contains: title as string,
+              mode: 'insensitive', // makes the search case insensitive
+            },
+          },
+          include: {
+            videos: true,
+            ratings: true,
+            categories: true,
+          },
+        });
+        res.status(StatusCodes.OK).json(albums);
+      } catch (error) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
 }

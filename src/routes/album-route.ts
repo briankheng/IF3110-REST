@@ -24,6 +24,11 @@ export class AlbumRoute {
         this.authenticationMiddleware.authenticate(),
         this.albumController.show()
       )
+      .get(
+        "/album/search",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.search()
+      )
       .post(
         "/album",
         this.authenticationMiddleware.authenticate(),
