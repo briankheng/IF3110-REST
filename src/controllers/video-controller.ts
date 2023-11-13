@@ -152,7 +152,7 @@ export class VideoController {
         const videos = await prisma.video.findMany({
           where: {
             title: {
-              contains: title,
+              contains: title as string,
               mode: 'insensitive', // makes the search case insensitive
             },
           },
