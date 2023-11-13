@@ -65,3 +65,9 @@ export interface IValidateRequest {
   userID: number;
   albumID: number;
 }
+
+// Favorite Interface
+export interface IFavoriteRequest {
+  userId: number;
+  albumId: number;
+}

@@ -14,7 +14,7 @@ services:
   database:
     container_name: rest-db
     image: postgres:latest
-    restart: unless-stopped
+    restart: always
     ports:
       - '9907:5432'
     volumes:

@@ -5,6 +5,7 @@ import { CommentRoute } from "./comment-route";
 import { RatingRoute } from "./rating-route";
 import { SoapRoute } from "./soap-route";
 import { UserRoute } from "./user-route";
+import { FavoriteRoute } from "./favorite-route";
 
 export {
   AlbumRoute,
@@ -13,5 +14,6 @@ export {
   CommentRoute,
   RatingRoute,
   SoapRoute,
-  UserRoute
+  UserRoute,
+  FavoriteRoute,
 };
