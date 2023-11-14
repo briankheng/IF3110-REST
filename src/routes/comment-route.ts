@@ -19,11 +19,6 @@ export class CommentRoute {
         this.authenticationMiddleware.authenticate(),
         this.commentController.index()
       )
-      .get(
-        "/comment/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.commentController.show()
-      )
       .post(
         "/comment",
         this.authenticationMiddleware.authenticate(),

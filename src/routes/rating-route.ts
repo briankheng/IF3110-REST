@@ -19,11 +19,6 @@ export class RatingRoute {
         this.authenticationMiddleware.authenticate(),
         this.ratingController.index()
       )
-      .get(
-        "/rating/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.ratingController.show()
-      )
       .post(
         "/rating",
         this.authenticationMiddleware.authenticate(),

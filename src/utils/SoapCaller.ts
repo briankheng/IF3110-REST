@@ -18,8 +18,8 @@ class SoapCaller {
       "api-key": process.env.SOAP_API_KEY,
     };
 
-    // const updatedUrl = this.url.replace('localhost', '127.0.0.1');
-    const updatedUrl = this.url.replace("localhost", "host.docker.internal");
+    const updatedUrl = this.url.replace('localhost', '127.0.0.1');
+    // const updatedUrl = this.url.replace("localhost", "host.docker.internal");
 
     console.log("Request Headers:", headers);
 
@@ -49,7 +49,7 @@ class SoapCaller {
       }
 
       console.log("Retval:", returnVal);
-      console.log("JSON Resp:", this.buildResponseJSON(returnVal));
+      console.log("JSON Resp:", this.buildResponseJSON(returnVal, method));
 
       return this.buildResponseJSON(returnVal, method);
     } catch (error) {

@@ -8,28 +8,23 @@ export class CommentController {
   index() {
     return async (req: Request, res: Response) => {
       try {
-        const comments = await prisma.comment.findMany();
-        res.status(StatusCodes.OK).json(comments);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
+        const { videoId } = req.query;
 
-  show() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        const comment = await prisma.comment.findUnique({
+        if (!videoId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
+
+        const comments = await prisma.comment.findMany({
           where: {
-            id: Number(id),
+            videoId: Number(videoId),
           },
         });
-        res.status(StatusCodes.OK).json(comment);
+
+        return res.status(StatusCodes.OK).json(comments);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -39,17 +34,19 @@ export class CommentController {
   store() {
     return async (req: Request, res: Response) => {
       try {
-        const { text, user_id, video_id }: ICommentRequest = req.body;
+        const { text, userId, videoId }: ICommentRequest = req.body;
+
         const comment = await prisma.comment.create({
           data: {
             text,
-            user_id,
-            video_id,
+            userId,
+            videoId,
           },
         });
-        res.status(StatusCodes.CREATED).json(comment);
+
+        return res.status(StatusCodes.CREATED).json(comment);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -60,20 +57,22 @@ export class CommentController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-        const { text, user_id, video_id }: ICommentRequest = req.body;
+        const { text, userId, videoId }: ICommentRequest = req.body;
+
         const comment = await prisma.comment.update({
           where: {
             id: Number(id),
           },
           data: {
             text,
-            user_id,
-            video_id,
+            userId,
+            videoId,
           },
         });
-        res.status(StatusCodes.OK).json(comment);
+
+        return res.status(StatusCodes.OK).json(comment);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -84,14 +83,16 @@ export class CommentController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
+
         const comment = await prisma.comment.delete({
           where: {
             id: Number(id),
           },
         });
-        res.status(StatusCodes.OK).json(comment);
+
+        return res.status(StatusCodes.OK).json(comment);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }

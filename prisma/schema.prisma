@@ -12,7 +12,7 @@ model User {
   email    String    @unique
   username String    @unique
   password String
-  is_admin Boolean   @default(false)
+  isAdmin  Boolean   @default(false)
   name     String
   coins    Int       @default(0)
   comments Comment[]
@@ -37,22 +37,22 @@ model Video {
   url         String
   thumbnail   String
   views       Int       @default(0)
-  is_premium  Boolean   @default(false)
-  album_id    Int
+  isPremium   Boolean   @default(false)
+  albumId     Int
   comments    Comment[]
   users       User[]
 
-  album Album @relation(fields: [album_id], references: [id])
+  album Album @relation(fields: [albumId], references: [id])
 }
 
 model Rating {
-  id       Int @id @default(autoincrement())
-  score    Int
-  user_id  Int
-  album_id Int
+  id      Int @id @default(autoincrement())
+  score   Int
+  userId  Int
+  albumId Int
 
-  user  User  @relation(fields: [user_id], references: [id])
-  album Album @relation(fields: [album_id], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  album Album @relation(fields: [albumId], references: [id])
 }
 
 model Category {
@@ -62,11 +62,11 @@ model Category {
 }
 
 model Comment {
-  id       Int    @id @default(autoincrement())
-  text     String
-  user_id  Int
-  video_id Int
+  id      Int    @id @default(autoincrement())
+  text    String
+  userId  Int
+  videoId Int
 
-  user  User  @relation(fields: [user_id], references: [id])
-  video Video @relation(fields: [video_id], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
 }

@@ -20,24 +20,14 @@ export class CategoryRoute {
         this.categoryController.index()
       )
       .get(
+        "/category/search",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.getAlbums()
+      )
+      .get(
         "/category/:id",
         this.authenticationMiddleware.authenticate(),
         this.categoryController.show()
-      )
-      .post(
-        "/category",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.store()
-      )
-      .put(
-        "/category/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.update()
-      )
-      .delete(
-        "/category/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.destroy()
       );
   }
 }

@@ -20,14 +20,19 @@ export class AlbumRoute {
         this.albumController.index()
       )
       .get(
-        "/album/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.albumController.show()
-      )
-      .get(
         "/album/search",
         this.authenticationMiddleware.authenticate(),
         this.albumController.search()
+      )
+      .get(
+        "/album/recommend",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.recommend()
+      )
+      .get(
+        "/album/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.show()
       )
       .post(
         "/album",

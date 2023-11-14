@@ -16,8 +16,8 @@ export class FavoriteRoute {
     return Router()
       .get(
         "/favorite",
-        // this.authenticationMiddleware.authenticate(),
-        this.favoriteController.index()
+        this.authenticationMiddleware.authenticate(),
+        (req, res) => this.favoriteController.index(req, res)
       )
       .post(
         "/favorite",

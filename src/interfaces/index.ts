@@ -28,6 +28,7 @@ export interface IAlbumRequest {
   title: string;
   description: string;
   thumbnail: string;
+  categoryIds: number[];
 }
 
 // Category Interface
@@ -38,15 +39,15 @@ export interface ICategoryRequest {
 // Comment Interface
 export interface ICommentRequest {
   text: string;
-  user_id: number;
-  video_id: number;
+  userId: number;
+  videoId: number;
 }
 
 // Rating Interface
 export interface IRatingRequest {
   score: number;
-  user_id: number;
-  album_id: number;
+  userId: number;
+  albumId: number;
 }
 
 // Video Interface
@@ -56,8 +57,8 @@ export interface IVideoRequest {
   url: string;
   thumbnail: string;
   views: number;
-  is_premium: boolean;
-  album_id: number;
+  isPremium: boolean;
+  albumId: number;
 }
 
 // SOAP Interface
