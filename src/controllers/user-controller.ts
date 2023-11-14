@@ -193,7 +193,6 @@ export class UserController {
       try {
         // Convert userIds to an array of strings
         const userIdsArray = userIds.split(",");
-        console.log(userIdsArray);
 
         // Query the database to get user emails by ids
         const users = await prisma.user.findMany({

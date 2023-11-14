@@ -182,7 +182,6 @@ export class VideoController {
     };
 
     // Create soapCaller
-    console.log(process.env.SOAP_URL_DOCKER + "/subscription");
     const soapCaller = new SoapCaller(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER + "/subscription" || '' : process.env.SOAP_URL + "/subscription" || '');
 
     try {

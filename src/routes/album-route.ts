@@ -15,9 +15,9 @@ export class AlbumRoute {
   getRoutes() {
     return Router()
       .get(
-        "/album",
+        "/album/search",
         this.authenticationMiddleware.authenticate(),
-        this.albumController.index()
+        this.albumController.search()
       )
       .get(
         "/album/:id",
@@ -25,9 +25,9 @@ export class AlbumRoute {
         this.albumController.show()
       )
       .get(
-        "/album/search",
+        "/album",
         this.authenticationMiddleware.authenticate(),
-        this.albumController.search()
+        this.albumController.index()
       )
       .post(
         "/album",
