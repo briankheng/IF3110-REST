@@ -24,49 +24,53 @@ interface IUserRequest {
 export class UserController {
   token() {
     return async (req: Request, res: Response) => {
-      const { username, password }: TokenRequest = req.body;
-      if (!username || !password) {
-        res.status(StatusCodes.BAD_REQUEST).json({
-          message: ReasonPhrases.BAD_REQUEST,
+      try {
+        const { username, password }: TokenRequest = req.body;
+        if (!username || !password) {
+          return res.status(StatusCodes.BAD_REQUEST).json({
+            message: ReasonPhrases.BAD_REQUEST,
+          });
+        }
+
+        const user = await prisma.user.findFirst({
+          select: {
+            id: true,
+            password: true,
+            isAdmin: true,
+          },
+          where: {
+            username: username,
+          },
+        });
+
+        if (!user) {
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "Invalid credentials",
+          });
+        }
+
+        const isMatch = await bcryptjs.compare(password, user.password);
+        if (!isMatch) {
+          return res.status(StatusCodes.UNAUTHORIZED).json({
+            message: "Invalid credentials",
+          });
+        }
+
+        const { id, isAdmin } = user;
+        const payload: IAuthToken = { id, isAdmin: isAdmin };
+        const token = jwt.sign(payload, jwtConfig.secret, {
+          expiresIn: jwtConfig.expiresIn,
+        });
+
+        return res.status(StatusCodes.OK).json({
+          message: ReasonPhrases.OK,
+          token,
+        });
+      } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
         });
       }
-
-      const user = await prisma.user.findFirst({
-        select: {
-          id: true,
-          password: true,
-          isAdmin: true,
-        },
-        where: {
-          username: username,
-        },
-      });
-
-      if (!user) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
-          message: "Invalid credentials",
-        });
-        return;
-      }
-
-      const isMatch = await bcryptjs.compare(password, user.password);
-      if (!isMatch) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
-          message: "Invalid credentials",
-        });
-        return;
-      }
-
-      const { id, isAdmin } = user;
-      const payload: IAuthToken = { id, isAdmin: isAdmin };
-      const token = jwt.sign(payload, jwtConfig.secret, {
-        expiresIn: jwtConfig.expiresIn,
-      });
-
-      res.status(StatusCodes.OK).json({
-        message: ReasonPhrases.OK,
-        token,
-      });
     };
   }
 
@@ -75,7 +79,7 @@ export class UserController {
       try {
         const { email, username, name, password }: IUserRequest = req.body;
         if (!email || !username || !name || !password) {
-          throw res.status(StatusCodes.BAD_REQUEST).json({
+          return res.status(StatusCodes.BAD_REQUEST).json({
             message: ReasonPhrases.BAD_REQUEST,
           });
         }
@@ -85,7 +89,7 @@ export class UserController {
         });
 
         if (existingUserWithUsername) {
-          throw res.status(StatusCodes.BAD_REQUEST).json({
+          return res.status(StatusCodes.BAD_REQUEST).json({
             message: "Username already taken!",
           });
         }
@@ -95,7 +99,7 @@ export class UserController {
         });
 
         if (existingUserWithEmail) {
-          throw res.status(StatusCodes.BAD_REQUEST).json({
+          return res.status(StatusCodes.BAD_REQUEST).json({
             message: "Email already taken!",
           });
         }
@@ -112,7 +116,7 @@ export class UserController {
         });
 
         if (!newUser) {
-          throw res.status(StatusCodes.BAD_REQUEST).json({
+          return res.status(StatusCodes.BAD_REQUEST).json({
             message: ReasonPhrases.BAD_REQUEST,
           });
         }
