@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { IFavoriteRequest } from "../interfaces";
 import { SoapCaller } from "../utils";
+import prisma from "../prisma";
 
 export class FavoriteController {
   index() {
@@ -27,7 +28,24 @@ export class FavoriteController {
             ? process.env.SOAP_URL_DOCKER + "/favorite" || ""
             : process.env.SOAP_URL + "/favorite" || ""
         );
-        const response = await soapCaller.call("getFavorites", args);
+        const albumIds = await soapCaller.call("getFavorites", args);
+
+        const response = await Promise.all(
+          albumIds.data.map(async (albumId: number) => {
+            const album = await prisma.album.findUnique({
+              where: {
+                id: albumId,
+              },
+              include: {
+                videos: true,
+                ratings: true,
+                categories: true,
+              },
+            });
+
+            return album;
+          })
+        );
 
         return res.status(StatusCodes.OK).json(response);
       } catch (error) {
