@@ -53,8 +53,8 @@ export class VideoController {
           url,
           thumbnail,
           views,
-          is_premium,
-          album_id,
+          isPremium,
+          albumId,
         }: IVideoRequest = req.body;
         const video = await prisma.video.create({
           data: {
@@ -63,8 +63,8 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            // is_premium,
-            album_id,
+            // isPremium,
+            albumId,
           },
         });
         res.status(StatusCodes.CREATED).json(video);
@@ -86,8 +86,8 @@ export class VideoController {
           url,
           thumbnail,
           views,
-          is_premium,
-          album_id,
+          isPremium,
+          albumId,
         }: IVideoRequest = req.body;
         const video = await prisma.video.update({
           where: {
@@ -99,8 +99,8 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            // is_premium,
-            album_id,
+            // isPremium,
+            albumId,
           },
         });
         res.status(StatusCodes.OK).json(video);
@@ -153,7 +153,7 @@ export class VideoController {
           where: {
             title: {
               contains: title as string,
-              mode: 'insensitive', // makes the search case insensitive
+              mode: "insensitive", // makes the search case insensitive
             },
           },
           include: {
@@ -169,23 +169,27 @@ export class VideoController {
     };
   }
 
-  async notify (albumID : string, album_name : string, IPs: string | undefined) {
+  async notify(albumID: string, album_name: string, IPs: string | undefined) {
     // Check if IPs is defined before using it
     if (IPs === undefined) {
-      throw new Error('IP address is undefined');
+      throw new Error("IP address is undefined");
     }
 
     const args = {
       arg0: parseInt(albumID),
       arg1: album_name,
-      arg2: IPs
+      arg2: IPs,
     };
 
     // Create soapCaller
-    const soapCaller = new SoapCaller(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER + "/subscription" || '' : process.env.SOAP_URL + "/subscription" || '');
+    const soapCaller = new SoapCaller(
+      process.env.USE_DOCKER_CONFIG
+        ? process.env.SOAP_URL_DOCKER + "/subscription" || ""
+        : process.env.SOAP_URL + "/subscription" || ""
+    );
 
     try {
-      const response = await soapCaller.call('notifySubscriber', args);
+      const response = await soapCaller.call("notifySubscriber", args);
       return response; // Return the response from the SOAP call
     } catch (error) {
       console.error(error);

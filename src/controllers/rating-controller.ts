@@ -8,28 +8,34 @@ export class RatingController {
   index() {
     return async (req: Request, res: Response) => {
       try {
-        const ratings = await prisma.rating.findMany();
-        res.status(StatusCodes.OK).json(ratings);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
+        const { albumId, userId } = req.query;
 
-  show() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        const rating = await prisma.rating.findUnique({
+        if (!albumId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
+
+        if (userId) {
+          const rating = await prisma.rating.findFirst({
+            where: {
+              albumId: Number(albumId),
+              userId: Number(userId),
+            },
+          });
+
+          return res.status(StatusCodes.OK).json(rating);
+        }
+
+        const ratings = await prisma.rating.findMany({
           where: {
-            id: Number(id),
+            albumId: Number(albumId),
           },
         });
-        res.status(StatusCodes.OK).json(rating);
+
+        return res.status(StatusCodes.OK).json(ratings);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -39,12 +45,12 @@ export class RatingController {
   store() {
     return async (req: Request, res: Response) => {
       try {
-        const { score, user_id, album_id }: IRatingRequest = req.body;
+        const { score, userId, albumId }: IRatingRequest = req.body;
         const rating = await prisma.rating.create({
           data: {
             score,
-            user_id,
-            album_id,
+            userId,
+            albumId,
           },
         });
         res.status(StatusCodes.CREATED).json(rating);
@@ -60,15 +66,15 @@ export class RatingController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-        const { score, user_id, album_id }: IRatingRequest = req.body;
+        const { score, userId, albumId }: IRatingRequest = req.body;
         const rating = await prisma.rating.update({
           where: {
             id: Number(id),
           },
           data: {
             score,
-            user_id,
-            album_id,
+            userId,
+            albumId,
           },
         });
         res.status(StatusCodes.OK).json(rating);

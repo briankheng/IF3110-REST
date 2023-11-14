@@ -39,12 +39,12 @@ export class CommentController {
   store() {
     return async (req: Request, res: Response) => {
       try {
-        const { text, user_id, video_id }: ICommentRequest = req.body;
+        const { text, userId, videoId }: ICommentRequest = req.body;
         const comment = await prisma.comment.create({
           data: {
             text,
-            user_id,
-            video_id,
+            userId,
+            videoId,
           },
         });
         res.status(StatusCodes.CREATED).json(comment);
@@ -60,15 +60,15 @@ export class CommentController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
-        const { text, user_id, video_id }: ICommentRequest = req.body;
+        const { text, userId, videoId }: ICommentRequest = req.body;
         const comment = await prisma.comment.update({
           where: {
             id: Number(id),
           },
           data: {
             text,
-            user_id,
-            video_id,
+            userId,
+            videoId,
           },
         });
         res.status(StatusCodes.OK).json(comment);

@@ -35,7 +35,7 @@ export class UserController {
         select: {
           id: true,
           password: true,
-          is_admin: true,
+          isAdmin: true,
         },
         where: {
           username: username,
@@ -57,8 +57,8 @@ export class UserController {
         return;
       }
 
-      const { id, is_admin } = user;
-      const payload: IAuthToken = { id, isAdmin: is_admin };
+      const { id, isAdmin } = user;
+      const payload: IAuthToken = { id, isAdmin: isAdmin };
       const token = jwt.sign(payload, jwtConfig.secret, {
         expiresIn: jwtConfig.expiresIn,
       });
@@ -107,7 +107,7 @@ export class UserController {
             username,
             name,
             password: hashedPassword,
-            is_admin: false,
+            isAdmin: false,
           },
         });
 
@@ -117,8 +117,8 @@ export class UserController {
           });
         }
 
-        const { id, is_admin } = newUser;
-        const payload: IAuthToken = { id, isAdmin: is_admin };
+        const { id, isAdmin } = newUser;
+        const payload: IAuthToken = { id, isAdmin: isAdmin };
         const token = jwt.sign(payload, jwtConfig.secret, {
           expiresIn: jwtConfig.expiresIn,
         });
@@ -136,7 +136,7 @@ export class UserController {
     return async (req: Request, res: Response) => {
       const users = await prisma.user.findMany({
         select: { id: true, name: true },
-        where: { is_admin: false },
+        where: { isAdmin: false },
       });
 
       res.status(StatusCodes.OK).json({
@@ -149,7 +149,7 @@ export class UserController {
   admin() {
     return async (req: Request, res: Response) => {
       const admin = await prisma.user.findFirst({
-        where: { is_admin: true },
+        where: { isAdmin: true },
       });
 
       res.status(StatusCodes.OK).json({

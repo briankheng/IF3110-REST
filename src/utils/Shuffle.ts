@@ -12,15 +12,15 @@ type Video = {
     url: string;
     thumbnail: string;
     views: number;
-    is_premium: boolean;
-    album_id: number;
+    isPremium: boolean;
+    albumId: number;
 };
   
 type Rating = {
     id: number;
     score: number;
-    user_id: number;
-    album_id: number;
+    userId: number;
+    albumId: number;
 };
   
 type Category = {
