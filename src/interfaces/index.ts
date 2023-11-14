@@ -28,6 +28,7 @@ export interface IAlbumRequest {
   title: string;
   description: string;
   thumbnail: string;
+  categoryIds: number[];
 }
 
 // Category Interface
