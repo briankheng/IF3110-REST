@@ -8,7 +8,13 @@ export class FavoriteController {
   index() {
     return async (req: Request, res: Response) => {
       try {
-        const { userId }: IFavoriteRequest = req.body;
+        const { userId } = req.query;
+
+        if (!userId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
 
         const args = {
           arg0: userId,
@@ -23,9 +29,9 @@ export class FavoriteController {
         );
         const response = await soapCaller.call("getFavorites", args);
 
-        res.status(StatusCodes.OK).json(response);
+        return res.status(StatusCodes.OK).json(response);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -36,6 +42,12 @@ export class FavoriteController {
     return async (req: Request, res: Response) => {
       try {
         const { userId, albumId }: IFavoriteRequest = req.body;
+
+        if (!userId || !albumId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
 
         const args = {
           arg0: userId,
@@ -51,9 +63,9 @@ export class FavoriteController {
         );
         const response = await soapCaller.call("addFavorite", args);
 
-        res.status(StatusCodes.OK).json(response);
+        return res.status(StatusCodes.OK).json(response);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -64,6 +76,12 @@ export class FavoriteController {
     return async (req: Request, res: Response) => {
       try {
         const { userId, albumId }: IFavoriteRequest = req.body;
+
+        if (!userId || !albumId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
 
         const args = {
           arg0: userId,
@@ -79,9 +97,9 @@ export class FavoriteController {
         );
         const response = await soapCaller.call("removeFavorite", args);
 
-        res.status(StatusCodes.OK).json(response);
+        return res.status(StatusCodes.OK).json(response);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
