@@ -30,8 +30,11 @@ export class FavoriteController {
         );
         const albumIds = await soapCaller.call("getFavorites", args);
 
+        // Convert album IDs to numbers
+        const numericAlbumIds = albumIds.data.map((albumId: string) => parseInt(albumId, 10));
+
         const response = await Promise.all(
-          albumIds.data.map(async (albumId: number) => {
+          numericAlbumIds.map(async (albumId: number) => {
             const album = await prisma.album.findUnique({
               where: {
                 id: albumId,
@@ -48,6 +51,7 @@ export class FavoriteController {
         );
 
         return res.status(StatusCodes.OK).json(response);
+
       } catch (error) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
