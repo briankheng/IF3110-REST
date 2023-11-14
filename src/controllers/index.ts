@@ -5,6 +5,7 @@ import { RatingController } from "./rating-controller";
 import { SoapController } from "./soap-controller";
 import { VideoController } from "./video-controller";
 import { FavoriteController } from "./favorite-controller";
+import { TokenController } from "./token-controller";
 
 export {
   AlbumController,
@@ -14,4 +15,5 @@ export {
   SoapController,
   VideoController,
   FavoriteController,
+  TokenController,
 };
