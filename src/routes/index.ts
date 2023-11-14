@@ -6,6 +6,7 @@ import { RatingRoute } from "./rating-route";
 import { SoapRoute } from "./soap-route";
 import { UserRoute } from "./user-route";
 import { FavoriteRoute } from "./favorite-route";
+import { TokenRoute } from "./token-route";
 
 export {
   AlbumRoute,
@@ -16,4 +17,5 @@ export {
   SoapRoute,
   UserRoute,
   FavoriteRoute,
+  TokenRoute
 };

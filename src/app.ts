@@ -14,7 +14,8 @@ import {
   RatingRoute,
   SoapRoute,
   UserRoute,
-  FavoriteRoute
+  FavoriteRoute,
+  TokenRoute,
 } from "./routes";
 
 export class App {
@@ -29,6 +30,7 @@ export class App {
     const ratingRoute = new RatingRoute();
     const soapRoute = new SoapRoute();
     const favoriteRoute = new FavoriteRoute();
+    const tokenRoute = new TokenRoute();
 
     this.server = express();
     // this.server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)({}));
@@ -51,7 +53,8 @@ export class App {
       commentRoute.getRoutes(),
       ratingRoute.getRoutes(),
       soapRoute.getRoutes(),
-      favoriteRoute.getRoutes()
+      favoriteRoute.getRoutes(),
+      tokenRoute.getRoutes(),
     );
   }
 
