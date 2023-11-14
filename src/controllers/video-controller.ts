@@ -6,27 +6,11 @@ import prisma from "../prisma";
 import { SoapCaller } from "../utils";
 
 export class VideoController {
-  index() {
-    return async (req: Request, res: Response) => {
-      try {
-        const videos = await prisma.video.findMany({
-          include: {
-            comments: true,
-          },
-        });
-        res.status(StatusCodes.OK).json(videos);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
-
   show() {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
+
         const video = await prisma.video.findUnique({
           where: {
             id: Number(id),
@@ -35,9 +19,10 @@ export class VideoController {
             comments: true,
           },
         });
-        res.status(StatusCodes.OK).json(video);
+
+        return res.status(StatusCodes.OK).json(video);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -56,6 +41,7 @@ export class VideoController {
           isPremium,
           albumId,
         }: IVideoRequest = req.body;
+
         const video = await prisma.video.create({
           data: {
             title,
@@ -63,13 +49,14 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            // isPremium,
+            isPremium,
             albumId,
           },
         });
-        res.status(StatusCodes.CREATED).json(video);
+
+        return res.status(StatusCodes.CREATED).json(video);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -89,6 +76,7 @@ export class VideoController {
           isPremium,
           albumId,
         }: IVideoRequest = req.body;
+
         const video = await prisma.video.update({
           where: {
             id: Number(id),
@@ -99,13 +87,14 @@ export class VideoController {
             url,
             thumbnail,
             views,
-            // isPremium,
+            isPremium,
             albumId,
           },
         });
-        res.status(StatusCodes.OK).json(video);
+
+        return res.status(StatusCodes.OK).json(video);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -116,14 +105,16 @@ export class VideoController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
+
         const video = await prisma.video.delete({
           where: {
             id: Number(id),
           },
         });
-        res.status(StatusCodes.OK).json(video);
+
+        return res.status(StatusCodes.OK).json(video);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -134,35 +125,12 @@ export class VideoController {
     return async (req: Request, res: Response) => {
       try {
         const { id, album_name } = req.body;
-        const video = await this.notify(id, album_name, req.ip);
-        res.status(StatusCodes.OK).json(video);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
 
-  // Search video based on title
-  search() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { title } = req.query;
-        const videos = await prisma.video.findMany({
-          where: {
-            title: {
-              contains: title as string,
-              mode: "insensitive", // makes the search case insensitive
-            },
-          },
-          include: {
-            comments: true,
-          },
-        });
-        res.status(StatusCodes.OK).json(videos);
+        const video = await this.notify(id, album_name, req.ip);
+
+        return res.status(StatusCodes.OK).json(video);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }

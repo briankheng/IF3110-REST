@@ -15,24 +15,19 @@ export class VideoRoute {
   getRoutes() {
     return Router()
       .get(
-        "/video",
-        this.authenticationMiddleware.authenticate(),
-        this.videoController.index()
-      )
-      .get(
         "/video/:id",
         this.authenticationMiddleware.authenticate(),
         this.videoController.show()
-      )
-      .get(
-        "/video/search",
-        this.authenticationMiddleware.authenticate(),
-        this.videoController.search()
       )
       .post(
         "/video",
         this.authenticationMiddleware.authenticate(),
         this.videoController.store()
+      )
+      .post(
+        "/video/notify",
+        this.authenticationMiddleware.authenticate(),
+        this.videoController.dummynotify()
       )
       .put(
         "/video/:id",
@@ -43,10 +38,6 @@ export class VideoRoute {
         "/video/:id",
         this.authenticationMiddleware.authenticate(),
         this.videoController.destroy()
-      )
-      .post(
-        "/video/notify",
-        this.videoController.dummynotify()
       );
   }
 }
