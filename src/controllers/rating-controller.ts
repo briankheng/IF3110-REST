@@ -53,9 +53,10 @@ export class RatingController {
             albumId,
           },
         });
-        res.status(StatusCodes.CREATED).json(rating);
+
+        return res.status(StatusCodes.CREATED).json(rating);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -77,9 +78,9 @@ export class RatingController {
             albumId,
           },
         });
-        res.status(StatusCodes.OK).json(rating);
+        return res.status(StatusCodes.OK).json(rating);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -95,9 +96,9 @@ export class RatingController {
             id: Number(id),
           },
         });
-        res.status(StatusCodes.OK).json(rating);
+        return res.status(StatusCodes.OK).json(rating);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
