@@ -1,7 +1,7 @@
 import SoapCaller from "./SoapCaller";
-// import WrapperErrorHandler from "./WrapperErrorHandler";
+import Shuffle from "./Shuffle";
 import Hasher from "./Hasher";
 
 export {
-    SoapCaller, Hasher
+    SoapCaller, Shuffle, Hasher
 }

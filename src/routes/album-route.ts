@@ -20,6 +20,11 @@ export class AlbumRoute {
         this.albumController.search()
       )
       .get(
+        "/album/recommend",
+        this.authenticationMiddleware.authenticate(),
+        this.albumController.recommend()
+      )
+      .get(
         "/album/:id",
         this.authenticationMiddleware.authenticate(),
         this.albumController.show()

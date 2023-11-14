@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 
 import { IAlbumRequest } from "../interfaces";
 import prisma from "../prisma";
+import { Shuffle } from "../utils";
 
 export class AlbumController {
   index() {
@@ -16,6 +17,27 @@ export class AlbumController {
           },
         });
         res.status(StatusCodes.OK).json(albums);
+      } catch (error) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
+  recommend() {
+    return async (req: Request, res: Response) => {
+      try {
+        const albums = await prisma.album.findMany({
+          include: {
+            videos: true,
+            ratings: true,
+            categories: true,
+          },
+        });
+        const shuffledAlbums = Shuffle(albums);
+        const videosYouMightLike = shuffledAlbums.slice(0, 6);
+        res.status(StatusCodes.OK).json(videosYouMightLike);
       } catch (error) {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
