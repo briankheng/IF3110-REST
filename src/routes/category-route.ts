@@ -15,6 +15,11 @@ export class CategoryRoute {
   getRoutes() {
     return Router()
       .get(
+        "/category",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.index()
+      )
+      .get(
         "/category/search",
         this.authenticationMiddleware.authenticate(),
         this.categoryController.getAlbums()
@@ -23,26 +28,6 @@ export class CategoryRoute {
         "/category/:id",
         this.authenticationMiddleware.authenticate(),
         this.categoryController.show()
-      )
-      .get(
-        "/category",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.index()
-      )
-      .post(
-        "/category",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.store()
-      )
-      .put(
-        "/category/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.update()
-      )
-      .delete(
-        "/category/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.categoryController.destroy()
       );
   }
 }

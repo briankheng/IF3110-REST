@@ -13,9 +13,10 @@ export class CategoryController {
             albums: true,
           },
         });
-        res.status(StatusCodes.OK).json(categories);
+
+        return res.status(StatusCodes.OK).json(categories);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -26,6 +27,7 @@ export class CategoryController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
+
         const category = await prisma.category.findUnique({
           where: {
             id: Number(id),
@@ -34,9 +36,10 @@ export class CategoryController {
             albums: true,
           },
         });
-        res.status(StatusCodes.OK).json(category);
+
+        return res.status(StatusCodes.OK).json(category);
       } catch (error) {
-        res
+        return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
@@ -47,7 +50,7 @@ export class CategoryController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.query;
-        
+
         // Find the category with the specified ID
         const category = await prisma.category.findUnique({
           where: {
@@ -70,64 +73,6 @@ export class CategoryController {
         const albums = category.albums;
 
         res.status(StatusCodes.OK).json(albums);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
-
-  store() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { name }: ICategoryRequest = req.body;
-        const category = await prisma.category.create({
-          data: {
-            name,
-          },
-        });
-        res.status(StatusCodes.CREATED).json(category);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
-
-  update() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        const { name }: ICategoryRequest = req.body;
-        const category = await prisma.category.update({
-          where: {
-            id: Number(id),
-          },
-          data: {
-            name,
-          },
-        });
-        res.status(StatusCodes.OK).json(category);
-      } catch (error) {
-        res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
-
-  destroy() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id } = req.params;
-        const category = await prisma.category.delete({
-          where: {
-            id: Number(id),
-          },
-        });
-        res.status(StatusCodes.OK).json(category);
       } catch (error) {
         res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
