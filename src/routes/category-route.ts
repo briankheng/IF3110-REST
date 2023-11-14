@@ -15,14 +15,19 @@ export class CategoryRoute {
   getRoutes() {
     return Router()
       .get(
-        "/category",
+        "/category/search",
         this.authenticationMiddleware.authenticate(),
-        this.categoryController.index()
+        this.categoryController.getAlbums()
       )
       .get(
         "/category/:id",
         this.authenticationMiddleware.authenticate(),
         this.categoryController.show()
+      )
+      .get(
+        "/category",
+        this.authenticationMiddleware.authenticate(),
+        this.categoryController.index()
       )
       .post(
         "/category",

@@ -43,6 +43,41 @@ export class CategoryController {
     };
   }
 
+  getAlbums() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.query;
+        
+        // Find the category with the specified ID
+        const category = await prisma.category.findUnique({
+          where: {
+            id: Number(id),
+          },
+          include: {
+            albums: true,
+          },
+        });
+
+        if (!category) {
+          // Return a 404 response if the category is not found
+          res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: ReasonPhrases.NOT_FOUND });
+          return;
+        }
+
+        // Access the albums property of the category to get all associated albums
+        const albums = category.albums;
+
+        res.status(StatusCodes.OK).json(albums);
+      } catch (error) {
+        res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
   store() {
     return async (req: Request, res: Response) => {
       try {
