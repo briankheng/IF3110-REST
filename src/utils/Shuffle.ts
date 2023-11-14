@@ -1,40 +1,4 @@
-type Album = {
-    id: number;
-    title: string;
-    description: string;
-    thumbnail: string;
-};
-
-type Video = {
-    id: number;
-    title: string;
-    description: string;
-    url: string;
-    thumbnail: string;
-    views: number;
-    isPremium: boolean;
-    albumId: number;
-};
-  
-type Rating = {
-    id: number;
-    score: number;
-    userId: number;
-    albumId: number;
-};
-  
-type Category = {
-    id: number;
-    name: string;
-};
-
-type AlbumResponse = Album & {
-    videos: Video[];
-    ratings: Rating[];
-    categories: Category[];
-};
-
-const shuffleAlbum = (array : AlbumResponse[]) => {
+const shuffleAlbum = (array : any) => {
     const shuffledArray = [...array];
     for (let i = shuffledArray.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
