@@ -49,7 +49,7 @@ class SoapCaller {
       }
 
       console.log("Retval:", returnVal);
-      console.log("JSON Resp:", this.buildResponseJSON(returnVal));
+      console.log("JSON Resp:", this.buildResponseJSON(returnVal, method));
 
       return this.buildResponseJSON(returnVal, method);
     } catch (error) {
