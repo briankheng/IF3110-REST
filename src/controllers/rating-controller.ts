@@ -46,6 +46,7 @@ export class RatingController {
     return async (req: Request, res: Response) => {
       try {
         const { score, userId, albumId }: IRatingRequest = req.body;
+
         const rating = await prisma.rating.create({
           data: {
             score,
@@ -68,6 +69,7 @@ export class RatingController {
       try {
         const { id } = req.params;
         const { score, userId, albumId }: IRatingRequest = req.body;
+
         const rating = await prisma.rating.update({
           where: {
             id: Number(id),
@@ -78,6 +80,7 @@ export class RatingController {
             albumId,
           },
         });
+
         return res.status(StatusCodes.OK).json(rating);
       } catch (error) {
         return res
@@ -91,11 +94,13 @@ export class RatingController {
     return async (req: Request, res: Response) => {
       try {
         const { id } = req.params;
+
         const rating = await prisma.rating.delete({
           where: {
             id: Number(id),
           },
         });
+
         return res.status(StatusCodes.OK).json(rating);
       } catch (error) {
         return res
