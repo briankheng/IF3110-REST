@@ -4,7 +4,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "is_admin" BOOLEAN NOT NULL DEFAULT false,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "name" TEXT NOT NULL,
     "coins" INTEGER NOT NULL DEFAULT 0,
 
@@ -29,8 +29,8 @@ CREATE TABLE "Video" (
     "url" TEXT NOT NULL,
     "thumbnail" TEXT NOT NULL,
     "views" INTEGER NOT NULL DEFAULT 0,
-    "is_premium" BOOLEAN NOT NULL DEFAULT false,
-    "album_id" INTEGER NOT NULL,
+    "isPremium" BOOLEAN NOT NULL DEFAULT false,
+    "albumId" INTEGER NOT NULL,
 
     CONSTRAINT "Video_pkey" PRIMARY KEY ("id")
 );
@@ -39,8 +39,8 @@ CREATE TABLE "Video" (
 CREATE TABLE "Rating" (
     "id" SERIAL NOT NULL,
     "score" INTEGER NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "album_id" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "albumId" INTEGER NOT NULL,
 
     CONSTRAINT "Rating_pkey" PRIMARY KEY ("id")
 );
@@ -57,8 +57,8 @@ CREATE TABLE "Category" (
 CREATE TABLE "Comment" (
     "id" SERIAL NOT NULL,
     "text" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL,
-    "video_id" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "videoId" INTEGER NOT NULL,
 
     CONSTRAINT "Comment_pkey" PRIMARY KEY ("id")
 );
@@ -94,19 +94,19 @@ CREATE UNIQUE INDEX "_AlbumToCategory_AB_unique" ON "_AlbumToCategory"("A", "B")
 CREATE INDEX "_AlbumToCategory_B_index" ON "_AlbumToCategory"("B");
 
 -- AddForeignKey
-ALTER TABLE "Video" ADD CONSTRAINT "Video_album_id_fkey" FOREIGN KEY ("album_id") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Video" ADD CONSTRAINT "Video_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Rating" ADD CONSTRAINT "Rating_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Rating" ADD CONSTRAINT "Rating_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Rating" ADD CONSTRAINT "Rating_album_id_fkey" FOREIGN KEY ("album_id") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Rating" ADD CONSTRAINT "Rating_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "Album"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Comment" ADD CONSTRAINT "Comment_video_id_fkey" FOREIGN KEY ("video_id") REFERENCES "Video"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Comment" ADD CONSTRAINT "Comment_videoId_fkey" FOREIGN KEY ("videoId") REFERENCES "Video"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_UserToVideo" ADD CONSTRAINT "_UserToVideo_A_fkey" FOREIGN KEY ("A") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
