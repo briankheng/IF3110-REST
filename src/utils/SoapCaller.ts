@@ -19,7 +19,7 @@ class SoapCaller {
     };
 
     const updatedUrl = this.url.replace('localhost', '127.0.0.1');
-    // const updatedUrl = this.url.replace("localhost", "host.docker.internal");
+    // const updatedUrl = this.url.replace("localhost", "0.0.0.0");
 
     console.log("Request Headers:", headers);
 

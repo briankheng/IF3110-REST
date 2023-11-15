@@ -1,15 +1,15 @@
 import { Router } from "express";
 
 import { AuthenticationMiddleware } from "../middlewares";
-import { SoapController } from "../controllers";
+import { SubscriptionController } from "../controllers";
 
-export class SoapRoute {
+export class SubscriptionRoute {
     authenticationMiddleware: AuthenticationMiddleware;
-    soapController: SoapController;
+    soapController: SubscriptionController;
 
     constructor() {
         this.authenticationMiddleware = new AuthenticationMiddleware();
-        this.soapController = new SoapController(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER + "/subscription" || '' : process.env.SOAP_URL + "/subscription" || '');
+        this.soapController = new SubscriptionController(process.env.USE_DOCKER_CONFIG ? process.env.SOAP_URL_DOCKER + "/subscription" || '' : process.env.SOAP_URL + "/subscription" || '');
     }
 
     getRoutes() {
@@ -20,10 +20,14 @@ export class SoapRoute {
             .post("/subscribe/reject", 
                 this.authenticationMiddleware.authenticate(),
                 this.soapController.reject())
-            .post("/subscribe/request", 
+            .post("/subscribe/request",
+                this.authenticationMiddleware.authenticate(),
                 this.soapController.request())
+            .post("/subscribe/unsubscribe",
+                this.authenticationMiddleware.authenticate(),
+                this.soapController.unsubscribe())
             .get("/subscribe",
                 this.authenticationMiddleware.authenticate(),
-                this.soapController.index())
+                this.soapController.verify())
     }
 }

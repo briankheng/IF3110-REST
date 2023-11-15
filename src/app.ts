@@ -12,7 +12,7 @@ import {
   CategoryRoute,
   CommentRoute,
   RatingRoute,
-  SoapRoute,
+  SubscriptionRoute,
   UserRoute,
   FavoriteRoute,
   TokenRoute,
@@ -28,18 +28,11 @@ export class App {
     const categoryRoute = new CategoryRoute();
     const commentRoute = new CommentRoute();
     const ratingRoute = new RatingRoute();
-    const soapRoute = new SoapRoute();
+    const subscriptionRoute = new SubscriptionRoute();
     const favoriteRoute = new FavoriteRoute();
     const tokenRoute = new TokenRoute();
 
     this.server = express();
-    // this.server.use((cors as (options: cors.CorsOptions) => express.RequestHandler)({}));
-    // cors({
-    //   origin: '*', // Replace with your allowed domain
-    //   methods: ['GET', 'POST', 'OPTIONS'], // Specify allowed HTTP methods
-    //   allowedHeaders: ['Content-Type', 'Authorization', 'api-key'], // Specify allowed headers
-    //   credentials: true, // Allow credentials (cookies, HTTP authentication)
-    // })
     this.server.use(cors());
     this.server.use(
       "/api",
@@ -52,7 +45,7 @@ export class App {
       categoryRoute.getRoutes(),
       commentRoute.getRoutes(),
       ratingRoute.getRoutes(),
-      soapRoute.getRoutes(),
+      subscriptionRoute.getRoutes(),
       favoriteRoute.getRoutes(),
       tokenRoute.getRoutes(),
     );

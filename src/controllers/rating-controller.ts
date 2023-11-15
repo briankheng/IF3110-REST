@@ -67,17 +67,30 @@ export class RatingController {
   update() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
         const { score, userId, albumId }: IRatingRequest = req.body;
 
+        // Find the record based on userId and albumId
+        const existingRating = await prisma.rating.findFirst({
+          where: {
+            albumId: Number(albumId),
+            userId: Number(userId),
+          },
+        });
+
+        if (!existingRating) {
+          // Handle the case where the record is not found
+          return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Rating not found' });
+        }
+
+        // Use the retrieved id to update the record
         const rating = await prisma.rating.update({
           where: {
-            id: Number(id),
+            id: existingRating.id,
           },
           data: {
-            score,
-            userId,
-            albumId,
+            score: score,
           },
         });
 
@@ -93,11 +106,25 @@ export class RatingController {
   destroy() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
+        const { userId, albumId }: IRatingRequest = req.body;
+        // Find the record based on userId and albumId
+        const existingRating = await prisma.rating.findFirst({
+          where: {
+            albumId: Number(albumId),
+            userId: Number(userId),
+          },
+        });
+
+        if (!existingRating) {
+          // Handle the case where the record is not found
+          return res
+            .status(StatusCodes.NOT_FOUND)
+            .json({ message: 'Rating not found' });
+        }
 
         const rating = await prisma.rating.delete({
           where: {
-            id: Number(id),
+            id: existingRating.id,
           },
         });
 

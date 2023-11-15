@@ -67,6 +67,39 @@ export class FavoriteController {
     }
   }
 
+  verify() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { userId, albumId } = req.query;
+
+        if (!userId || !albumId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
+
+        const soapCaller = new SoapCaller(
+          process.env.USE_DOCKER_CONFIG
+            ? process.env.SOAP_URL_DOCKER + "/favorite" || ""
+            : process.env.SOAP_URL + "/favorite" || ""
+        );
+
+        const albumIds = await soapCaller.call("getFavorites", {
+          arg0: userId,
+          arg1: req.ip,
+        });
+
+        const response = albumIds.includes(albumId);
+
+        return res.status(StatusCodes.OK).json(response);
+      } catch (error) {
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
   store() {
     return async (req: Request, res: Response) => {
       try {

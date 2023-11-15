@@ -3,7 +3,7 @@ import { VideoRoute } from "./video-route";
 import { CategoryRoute } from "./category-route";
 import { CommentRoute } from "./comment-route";
 import { RatingRoute } from "./rating-route";
-import { SoapRoute } from "./soap-route";
+import { SubscriptionRoute } from "./subscription-route";
 import { UserRoute } from "./user-route";
 import { FavoriteRoute } from "./favorite-route";
 import { TokenRoute } from "./token-route";
@@ -14,7 +14,7 @@ export {
   CategoryRoute,
   CommentRoute,
   RatingRoute,
-  SoapRoute,
+  SubscriptionRoute,
   UserRoute,
   FavoriteRoute,
   TokenRoute

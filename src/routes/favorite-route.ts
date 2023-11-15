@@ -15,6 +15,11 @@ export class FavoriteRoute {
   getRoutes() {
     return Router()
       .get(
+        "/favorite/verify",
+        this.authenticationMiddleware.authenticate(),
+        this.favoriteController.verify()
+      )
+      .get(
         "/favorite",
         this.authenticationMiddleware.authenticate(),
         (req, res) => this.favoriteController.index(req, res)
