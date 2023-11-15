@@ -150,6 +150,24 @@ export class UserController {
     };
   }
 
+  show() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const user = await prisma.user.findUnique({
+          where: { id: Number(id) },
+        });
+
+        return res.status(StatusCodes.OK).json(user);
+      } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+      }
+    };
+  }
+
   admin() {
     return async (req: Request, res: Response) => {
       const admin = await prisma.user.findFirst({

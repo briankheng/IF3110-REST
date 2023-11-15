@@ -29,6 +29,11 @@ export class CommentRoute {
         this.authenticationMiddleware.authenticate(),
         this.commentController.update()
       )
+      .patch(
+        "/comment/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.commentController.patch()
+      )
       .delete(
         "/comment/:id",
         this.authenticationMiddleware.authenticate(),

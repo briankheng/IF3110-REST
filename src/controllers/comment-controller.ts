@@ -79,6 +79,30 @@ export class CommentController {
     };
   }
 
+  patch(){
+    return async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+        const { text }: ICommentRequest = req.body;
+
+        const comment = await prisma.comment.update({
+          where: {
+            id: Number(id),
+          },
+          data: {
+            text,
+          },
+        });
+
+        return res.status(StatusCodes.OK).json(comment);
+      } catch (error) {
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
   destroy() {
     return async (req: Request, res: Response) => {
       try {

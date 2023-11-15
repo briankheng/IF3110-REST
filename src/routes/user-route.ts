@@ -26,6 +26,8 @@ export class UserRoute {
             .get("/user/me",
                 this.authenticationMiddleware.authenticate(),
                 this.userController.me())
+            .get("/user/:id", 
+                this.userController.show())
             .post("/user/token", 
                 this.userController.token())
             .post("/login",
