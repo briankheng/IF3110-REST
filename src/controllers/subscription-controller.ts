@@ -163,6 +163,7 @@ export class SubscriptionController {
 
       try {
         const response = await this.soapCaller.call("verifySubscription", args);
+        console.log(response);
         res.status(StatusCodes.OK).json(response);
       } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

@@ -89,9 +89,9 @@ export class FavoriteController {
           arg1: req.ip,
         });
 
-        const response = albumIds.includes(albumId);
-
+        const response = albumIds.data.includes(albumId);
         return res.status(StatusCodes.OK).json(response);
+
       } catch (error) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)

@@ -22,15 +22,10 @@ export class RatingRoute {
       .post(
         "/rating",
         this.authenticationMiddleware.authenticate(),
-        this.ratingController.store()
-      )
-      .put(
-        "/rating/:id",
-        this.authenticationMiddleware.authenticate(),
-        this.ratingController.update()
+        this.ratingController.modify()
       )
       .delete(
-        "/rating/:id",
+        "/rating",
         this.authenticationMiddleware.authenticate(),
         this.ratingController.destroy()
       );
