@@ -1,7 +1,7 @@
 import cache from "memory-cache";
 
 class CacheHandler {
-    private readonly EXPIRATION_TIME = 100000000;
+    private readonly EXPIRATION_TIME = 15000;
 
     public put(key: any, value: unknown) {
         return cache.put(key, value, this.EXPIRATION_TIME);
