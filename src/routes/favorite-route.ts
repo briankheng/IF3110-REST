@@ -33,6 +33,11 @@ export class FavoriteRoute {
         "/favorite",
         this.authenticationMiddleware.authenticate(),
         this.favoriteController.destroy()
+      )
+      .delete(
+        "/favorite/:id",
+        this.authenticationMiddleware.authenticate(),
+        this.favoriteController.deleteFavoritesByAlbumId()
       );
   }
 }

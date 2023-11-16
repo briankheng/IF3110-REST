@@ -17,7 +17,7 @@ export class FavoriteController {
       }
 
       const cacheKey = `Favorite-SOAP-${userId}`;
-      
+
       // Check the cache first
       const cachedResponse = await CacheHandler.handle(cacheKey, async () => {
         // Call SOAP Service
@@ -91,7 +91,6 @@ export class FavoriteController {
 
         const response = albumIds.data.includes(albumId);
         return res.status(StatusCodes.OK).json(response);
-
       } catch (error) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -160,6 +159,39 @@ export class FavoriteController {
         const response = await soapCaller.call("removeFavorite", args);
 
         return res.status(StatusCodes.OK).json(response);
+      } catch (error) {
+        return res
+          .status(StatusCodes.INTERNAL_SERVER_ERROR)
+          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
+      }
+    };
+  }
+
+  deleteFavoritesByAlbumId() {
+    return async (req: Request, res: Response) => {
+      try {
+        const { albumId } = req.params;
+
+        if (!albumId) {
+          return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ message: ReasonPhrases.BAD_REQUEST });
+        }
+
+        const args = {
+          arg0: albumId,
+          arg1: req.ip,
+        };
+
+        // Call SOAP Service
+        const soapCaller = new SoapCaller(
+          process.env.USE_DOCKER_CONFIG
+            ? process.env.SOAP_URL_DOCKER + "/favorite" || ""
+            : process.env.SOAP_URL + "/favorite" || ""
+        );
+        await soapCaller.call("removeFavoritesByAlbumId", args);
+
+        return res.status(StatusCodes.OK).json({ message: "OK" });
       } catch (error) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
