@@ -78,19 +78,25 @@ export class FavoriteController {
             .json({ message: ReasonPhrases.BAD_REQUEST });
         }
 
+        const args = {
+          arg0: userId,
+          arg1: albumId,
+          arg2: req.ip,
+        };
+
         const soapCaller = new SoapCaller(
           process.env.USE_DOCKER_CONFIG
             ? process.env.SOAP_URL_DOCKER + "/favorite" || ""
             : process.env.SOAP_URL + "/favorite" || ""
         );
 
-        const albumIds = await soapCaller.call("getFavorites", {
-          arg0: userId,
-          arg1: req.ip,
-        });
-
-        const response = albumIds.data.includes(albumId);
-        return res.status(StatusCodes.OK).json(response);
+        const albumIds = await soapCaller.call("getFavorites", args);
+        if (albumIds) {
+          const response = albumIds.data.includes(albumId);
+          return res.status(StatusCodes.OK).json(response);
+        } 
+        return res.status(StatusCodes.OK).json(false);
+        
       } catch (error) {
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)

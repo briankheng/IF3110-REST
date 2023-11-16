@@ -58,24 +58,30 @@ class SoapCaller {
     }
   }
 
-  private buildResponseJSON(json: JSON, method?: string) {
-    // How to not broke the code, Don't try this at home!
+  private buildResponseJSON(json: any, method?: string) {
     if (method === "getFavorites") {
       const response: any = { data: [] };
-
-      (json as any).map((item: any) => {
-        response.data.push(item["_text" as keyof typeof item]);
-      });
-
+  
+      if (json && typeof json === "object" && "_text" in json) {
+        response.data.push(json["_text"]);
+      } else if (Array.isArray(json)) {
+        // If json is an array, push each _text value to the data array
+        json.forEach((item) => {
+          if (item && typeof item === "object" && "_text" in item) {
+            response.data.push(item["_text"]);
+          }
+        });
+      }
+  
       return response;
     }
-
+  
     if (Array.isArray(json)) {
       return json.map((item) => this.flatten(item));
     }
-
+  
     return this.flatten(json);
-  }
+  }  
 
   private flatten(json: JSON): JSON {
     const response: any = {};
