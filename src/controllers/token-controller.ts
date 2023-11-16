@@ -14,17 +14,18 @@ export class TokenController {
         const soapCaller = new SoapCaller(process.env.SOAP_URL + "/token");
 
         const args = {
-          token: token,
+          arg0: token,
+          arg1: req.ip,
         };
 
         // Call the SOAP service
         const response = await soapCaller.call('checkToken', args);
 
         // If the token exists in the database
-        if (response.exists) {
+        if (response != null) {
           res.status(StatusCodes.OK).json({
             valid: true,
-            coinValue: response.coinValue,
+            message: response.coinValue,
           });
         } else {
           res.status(StatusCodes.OK).json({
