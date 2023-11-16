@@ -114,11 +114,10 @@ export class AlbumController {
   destroy() {
     return async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
 
         const album = await prisma.album.delete({
           where: {
-            id: Number(id),
+            id: Number(req.params.id),
           },
         });
 

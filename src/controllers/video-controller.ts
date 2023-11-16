@@ -54,6 +54,8 @@ export class VideoController {
           },
         });
 
+        await this.notify(albumId, title, req.ip);
+
         return res.status(StatusCodes.CREATED).json(video);
       } catch (error) {
         return res
@@ -121,30 +123,14 @@ export class VideoController {
     };
   }
 
-  dummynotify() {
-    return async (req: Request, res: Response) => {
-      try {
-        const { id, album_name } = req.body;
-
-        const video = await this.notify(id, album_name, req.ip);
-
-        return res.status(StatusCodes.OK).json(video);
-      } catch (error) {
-        return res
-          .status(StatusCodes.INTERNAL_SERVER_ERROR)
-          .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
-      }
-    };
-  }
-
-  async notify(albumID: string, album_name: string, IPs: string | undefined) {
+  async notify(albumID: number, album_name: string, IPs: string | undefined) {
     // Check if IPs is defined before using it
     if (IPs === undefined) {
       throw new Error("IP address is undefined");
     }
 
     const args = {
-      arg0: parseInt(albumID),
+      arg0: albumID,
       arg1: album_name,
       arg2: IPs,
     };
@@ -157,8 +143,8 @@ export class VideoController {
     );
 
     try {
-      const response = await soapCaller.call("notifySubscriber", args);
-      return response; // Return the response from the SOAP call
+      await soapCaller.call("notifySubscriber", args);
+      return;
     } catch (error) {
       console.error(error);
       throw error; // Rethrow the error to be caught in the outer catch block

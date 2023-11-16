@@ -27,11 +27,6 @@ export class VideoRoute {
         this.adminMiddleware.authenticate(),
         this.videoController.store()
       )
-      .post(
-        "/video/notify",
-        this.authenticationMiddleware.authenticate(),
-        this.videoController.dummynotify()
-      )
       .put(
         "/video/:id",
         this.authenticationMiddleware.authenticate(),

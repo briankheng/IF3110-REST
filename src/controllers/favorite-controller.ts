@@ -31,6 +31,10 @@ export class FavoriteController {
           arg1: req.ip,
         });
 
+        if (!albumIds) {
+          return [];
+        }
+
         // Convert album IDs to numbers
         const numericAlbumIds = albumIds.data.map((albumId: string) =>
           parseInt(albumId, 10)
@@ -52,6 +56,9 @@ export class FavoriteController {
             return album;
           })
         );
+
+        console.log("response");
+        console.log(response);
 
         // Cache the response
         CacheHandler.put(cacheKey, response);
@@ -176,16 +183,8 @@ export class FavoriteController {
   deleteFavoritesByAlbumId() {
     return async (req: Request, res: Response) => {
       try {
-        const { albumId } = req.params;
-
-        if (!albumId) {
-          return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json({ message: ReasonPhrases.BAD_REQUEST });
-        }
-
         const args = {
-          arg0: albumId,
+          arg0: Number(req.params.id),
           arg1: req.ip,
         };
 

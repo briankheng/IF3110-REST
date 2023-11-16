@@ -14,20 +14,18 @@ export class SubscriptionRoute {
 
     getRoutes() {
         return Router()
-            .post("/subscribe/accept",
-                this.authenticationMiddleware.authenticate(),
-                this.soapController.accept())
-            .post("/subscribe/reject", 
-                this.authenticationMiddleware.authenticate(),
-                this.soapController.reject())
-            .post("/subscribe/request",
+            .post("/subscribe",
                 this.authenticationMiddleware.authenticate(),
                 this.soapController.request())
-            .post("/subscribe/unsubscribe",
+            .delete("/subscribe",
                 this.authenticationMiddleware.authenticate(),
                 this.soapController.unsubscribe())
             .get("/subscribe",
                 this.authenticationMiddleware.authenticate(),
                 this.soapController.verify())
+            .delete("/subscribe/:id",
+                this.authenticationMiddleware.authenticate(),
+                this.soapController.deleteSubscriptionByAlbumId()
+            )
     }
 }

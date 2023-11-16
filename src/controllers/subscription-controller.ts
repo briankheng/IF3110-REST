@@ -58,90 +58,14 @@ export class SubscriptionController {
         }
 
         try {
-            const response = await this.soapCaller.call('unsubscribe', args);
-            res.status(StatusCodes.CREATED).json(response);
+            await this.soapCaller.call("unsubscribe", args);
+            return res.status(StatusCodes.OK).json({ message: "OK" });
         } catch (error) {
             res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
                 message: ReasonPhrases.INTERNAL_SERVER_ERROR,
             });
             return;
         }
-    };
-  }
-
-  accept() {
-    return async (req: Request, res: Response) => {
-      const { token } = req as IAuthRequest;
-      if (!token || !token.isAdmin) {
-        // Admin only
-        res.status(StatusCodes.UNAUTHORIZED).json({
-          message: ReasonPhrases.UNAUTHORIZED,
-        });
-        return;
-      }
-
-      // Parse request body
-      const { userId, albumId } = req.body;
-
-      if (!userId || !albumId) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ message: ReasonPhrases.BAD_REQUEST });
-      }
-
-      const args = {
-        arg0: userId,
-        arg1: albumId,
-        arg2: req.ip
-      };
-
-      try {
-        const response = await this.soapCaller.call("acceptSubscription", args);
-        res.status(StatusCodes.OK).json(response);
-      } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
-        });
-        return;
-      }
-    };
-  }
-
-  reject() {
-    return async (req: Request, res: Response) => {
-      const { token } = req as IAuthRequest;
-      if (!token || !token.isAdmin) {
-        // Admin only
-        res.status(StatusCodes.UNAUTHORIZED).json({
-          message: ReasonPhrases.UNAUTHORIZED,
-        });
-        return;
-      }
-
-      // Parse request body
-      const { userId, albumId } = req.body;
-
-      if (!userId || !albumId) {
-        return res
-          .status(StatusCodes.BAD_REQUEST)
-          .json({ message: ReasonPhrases.BAD_REQUEST });
-      }
-
-      const args = {
-        arg0: userId,
-        arg1: albumId,
-        arg2: req.ip
-      };
-
-      try {
-        const response = await this.soapCaller.call("rejectSubscription", args);
-        res.status(StatusCodes.OK).json(response);
-      } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
-        });
-        return;
-      }
     };
   }
 
@@ -165,6 +89,26 @@ export class SubscriptionController {
         const response = await this.soapCaller.call("verifySubscription", args);
         console.log(response);
         res.status(StatusCodes.OK).json(response);
+      } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+        return;
+      }
+    };
+  }
+
+  deleteSubscriptionByAlbumId() {
+    return async (req: Request, res: Response) => {
+
+      const args = {
+        arg0: Number(req.params.id),
+        arg1: req.ip
+      };
+
+      try {
+        await this.soapCaller.call("removeSubscriptionByAlbumId", args);
+        return res.status(StatusCodes.OK).json({ message: "OK" });
       } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,
