@@ -1,14 +1,16 @@
 import { Router } from "express";
 
-import { AuthenticationMiddleware } from "../middlewares";
+import { AdminMiddleware, AuthenticationMiddleware } from "../middlewares";
 import { VideoController } from "../controllers";
 
 export class VideoRoute {
   authenticationMiddleware: AuthenticationMiddleware;
+  adminMiddleware: AdminMiddleware;
   videoController: VideoController;
 
   constructor() {
     this.authenticationMiddleware = new AuthenticationMiddleware();
+    this.adminMiddleware = new AdminMiddleware();
     this.videoController = new VideoController();
   }
 
@@ -22,6 +24,7 @@ export class VideoRoute {
       .post(
         "/video",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.videoController.store()
       )
       .post(
@@ -32,11 +35,13 @@ export class VideoRoute {
       .put(
         "/video/:id",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.videoController.update()
       )
       .delete(
         "/video/:id",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.videoController.destroy()
       );
   }

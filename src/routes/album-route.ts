@@ -1,14 +1,16 @@
 import { Router } from "express";
 
-import { AuthenticationMiddleware } from "../middlewares";
+import { AdminMiddleware, AuthenticationMiddleware } from "../middlewares";
 import { AlbumController } from "../controllers";
 
 export class AlbumRoute {
   authenticationMiddleware: AuthenticationMiddleware;
+  adminMiddleware: AdminMiddleware;
   albumController: AlbumController;
 
   constructor() {
     this.authenticationMiddleware = new AuthenticationMiddleware();
+    this.adminMiddleware = new AdminMiddleware();
     this.albumController = new AlbumController();
   }
 
@@ -37,16 +39,19 @@ export class AlbumRoute {
       .post(
         "/album",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.albumController.store()
       )
       .put(
         "/album/:id",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.albumController.update()
       )
       .delete(
         "/album/:id",
         this.authenticationMiddleware.authenticate(),
+        this.adminMiddleware.authenticate(),
         this.albumController.destroy()
       );
   }

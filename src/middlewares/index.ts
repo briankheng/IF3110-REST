@@ -1,3 +1,4 @@
 import { AuthenticationMiddleware } from "./authentication-middleware";
+import { AdminMiddleware } from "./admin-middleware";
 
-export { AuthenticationMiddleware };
+export { AuthenticationMiddleware, AdminMiddleware };
