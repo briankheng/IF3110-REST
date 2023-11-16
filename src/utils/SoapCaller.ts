@@ -18,7 +18,7 @@ class SoapCaller {
       "api-key": process.env.SOAP_API_KEY,
     };
 
-    const updatedUrl = this.url.replace('localhost', '127.0.0.1');
+    const updatedUrl = this.url.replace("localhost", "127.0.0.1");
     // const updatedUrl = this.url.replace("localhost", "0.0.0.0");
 
     console.log("Request Headers:", headers);
@@ -61,13 +61,17 @@ class SoapCaller {
   private buildResponseJSON(json: JSON, method?: string) {
     // How to not broke the code, Don't try this at home!
     if (method === "getFavorites") {
-      const response: any = { data: [] };
+      if (Array.isArray(json)) {
+        const response: any = { data: [] };
 
-      (json as any).map((item: any) => {
-        response.data.push(item["_text" as keyof typeof item]);
-      });
+        (json as any).map((item: any) => {
+          response.data.push(item["_text" as keyof typeof item]);
+        });
 
-      return response;
+        return response;
+      } else {
+        return { data: [json["_text" as keyof typeof json]] };
+      }
     }
 
     if (Array.isArray(json)) {
