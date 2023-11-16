@@ -34,5 +34,8 @@ export class UserRoute {
                 this.userController.token())
             .post("/register",
                 this.userController.store())
+            .post("/user/buy/:id",
+                this.authenticationMiddleware.authenticate(),
+                this.userController.buyVideo());
     }
 }

@@ -143,7 +143,7 @@ export class UserController {
         where: { isAdmin: false },
       });
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         message: ReasonPhrases.OK,
         data: users,
       });
@@ -174,7 +174,7 @@ export class UserController {
         where: { isAdmin: true },
       });
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         message: ReasonPhrases.OK,
         data: admin,
       });
@@ -185,13 +185,12 @@ export class UserController {
     return async (req: Request, res: Response) => {
       const { token } = req as IAuthRequest;
       if (!token) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
+        return res.status(StatusCodes.UNAUTHORIZED).json({
           message: ReasonPhrases.UNAUTHORIZED,
         });
-        return;
       }
 
-      res.status(StatusCodes.OK).json({
+      return res.status(StatusCodes.OK).json({
         id: token.id,
         isAdmin: token.isAdmin,
       });
@@ -206,10 +205,9 @@ export class UserController {
 
       // Check if userIds is not present or not an array
       if (userIds === undefined || typeof userIds !== "string") {
-        res.status(StatusCodes.BAD_REQUEST).json({
+        return res.status(StatusCodes.BAD_REQUEST).json({
           message: ReasonPhrases.BAD_REQUEST,
         });
-        return;
       }
 
       try {
@@ -225,13 +223,12 @@ export class UserController {
         // Extract emails from the database result
         const emails = users.map((user) => user.email);
 
-        res.status(StatusCodes.OK).json({
+        return res.status(StatusCodes.OK).json({
           message: ReasonPhrases.OK,
           data: emails,
         });
       } catch (error) {
-        console.error(error);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,
         });
       }
@@ -252,9 +249,38 @@ export class UserController {
           },
         });
 
-        res.status(StatusCodes.OK).json(user);
+        return res.status(StatusCodes.OK).json(user);
       } catch (error) {
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+          message: ReasonPhrases.INTERNAL_SERVER_ERROR,
+        });
+      }
+    };
+  }
+
+  buyVideo() {
+    return async (req: Request, res: Response) => {
+      const { token } = req as IAuthRequest;
+      const { id } = req.params;
+
+      try {
+        const user = await prisma.user.update({
+          where: { id: token?.id },
+          data: {
+            coins: {
+              decrement: 10,
+            },
+            videos: {
+              connect: {
+                id: parseInt(id),
+              },
+            },
+          },
+        });
+
+        return res.status(StatusCodes.OK).json(user);
+      } catch (error) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
           message: ReasonPhrases.INTERNAL_SERVER_ERROR,
         });
       }

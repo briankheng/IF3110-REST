@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import jwt from "jsonwebtoken";
 
 import { IAuthRequest, IAuthToken } from "../interfaces";
 
@@ -24,7 +23,7 @@ export class AdminMiddleware {
 
         next();
       } catch (error) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
+        return res.status(StatusCodes.UNAUTHORIZED).json({
           message: ReasonPhrases.UNAUTHORIZED,
         });
       }

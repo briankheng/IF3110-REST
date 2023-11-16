@@ -12,10 +12,9 @@ export class AuthenticationMiddleware {
         const token = req.header("Authorization")?.replace("Bearer ", "");
 
         if (!token) {
-          res.status(StatusCodes.UNAUTHORIZED).json({
+          return res.status(StatusCodes.UNAUTHORIZED).json({
             message: ReasonPhrases.UNAUTHORIZED,
           });
-          return;
         }
 
         (req as IAuthRequest).token = jwt.verify(
@@ -25,7 +24,7 @@ export class AuthenticationMiddleware {
 
         next();
       } catch (error) {
-        res.status(StatusCodes.UNAUTHORIZED).json({
+        return res.status(StatusCodes.UNAUTHORIZED).json({
           message: ReasonPhrases.UNAUTHORIZED,
         });
       }
