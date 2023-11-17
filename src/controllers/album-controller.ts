@@ -114,21 +114,38 @@ export class AlbumController {
   destroy() {
     return async (req: Request, res: Response) => {
       try {
-
-        const album = await prisma.album.delete({
+        const albumId = Number(req.params.id);
+  
+        // Delete ratings associated with the album
+        await prisma.rating.deleteMany({
           where: {
-            id: Number(req.params.id),
+            albumId: albumId,
           },
         });
-
+  
+        // Delete videos associated with the album
+        await prisma.video.deleteMany({
+          where: {
+            albumId: albumId,
+          },
+        });
+  
+        // Delete the album
+        const album = await prisma.album.delete({
+          where: {
+            id: albumId,
+          },
+        });
+  
         return res.status(StatusCodes.OK).json(album);
       } catch (error) {
+        console.error(error);
         return res
           .status(StatusCodes.INTERNAL_SERVER_ERROR)
           .json({ message: ReasonPhrases.INTERNAL_SERVER_ERROR });
       }
     };
-  }
+  }  
 
   search() {
     return async (req: Request, res: Response) => {
