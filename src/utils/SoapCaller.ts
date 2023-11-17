@@ -18,8 +18,8 @@ class SoapCaller {
       "api-key": process.env.SOAP_API_KEY,
     };
 
-    const updatedUrl = this.url.replace("localhost", "127.0.0.1");
-    // const updatedUrl = this.url.replace("localhost", "0.0.0.0");
+    // const updatedUrl = this.url.replace("localhost", "127.0.0.1");
+    const updatedUrl = this.url.replace("localhost", "host.docker.internal");
 
     console.log("Request Headers:", headers);
 
