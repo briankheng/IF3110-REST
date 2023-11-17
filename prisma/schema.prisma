@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL_DOCKER")
+}
+
+model User {
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  username String    @unique
+  password String
+  isAdmin  Boolean   @default(false)
+  name     String
+  coins    Int       @default(0)
+  comments Comment[]
+  ratings  Rating[]
+  videos   Video[]
+}
+
+model Album {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  thumbnail   String
+  videos      Video[]
+  ratings     Rating[]
+  categories  Category[]
+}
+
+model Video {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  url         String
+  thumbnail   String
+  views       Int       @default(0)
+  isPremium   Boolean   @default(false)
+  albumId     Int
+  comments    Comment[]
+  users       User[]
+
+  album Album @relation(fields: [albumId], references: [id])
+}
+
+model Rating {
+  id      Int @id @default(autoincrement())
+  score   Int
+  userId  Int
+  albumId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  album Album @relation(fields: [albumId], references: [id])
+}
+
+model Category {
+  id     Int     @id @default(autoincrement())
+  name   String
+  albums Album[]
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement())
+  text    String
+  userId  Int
+  videoId Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  video Video @relation(fields: [videoId], references: [id])
+}

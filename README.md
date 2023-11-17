@@ -1,92 +1,101 @@
-# KBL-REST
+# KBLMovie.
+Tugas Besar 2 IF3110 Web Based Development
+<br />
 
+## Table of Contents
+* [General Info](#general-information)
+* [Skema Basis Data](#skema-basis-data)
+* [Endpoint API](#endpoint-api)
+* [Pembagian Tugas](#pembagian-tugas)
+* [Credits](#credits)
 
+## General Information
+Aplikasi yang kami buat adalah web yang bisa digunakan untuk menonton video. Video ini dapat disimpan pada suatu album, yang dapat dicari secara manual pada daftar album yang tertampil maupun melalui search bar. Untuk menunjang aplikasi, dibuat berbagai fitur yang mendukung aplikasi. Fitur-fitur yang secara umum menggunakan REST (Representational State Transfer) sebagai web service yang utama, yaitu fitur login dan register, fitur search album, fitur pemberian rating pada album, fitur pemberian komen pada video, dan fitur untuk melakukan CRUD album, fitur untuk membeli video, dan fitur untuk melakukan CRUD video.
 
-## Getting started
+## Skema Basis Data
+* Schema
+> ![Schema](./screenshot/schema-rest.jpg)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Endpoint API
+Album
+* GET /album albumController.index()
+* GET /album/search albumController.search()
+* GET /album/recommend albumController.recommend()
+* GET /album/:id albumController.show()
+* POST /album albumController.store()
+* PUT /album/:id albumController.update()
+* DELETE /album/:id albumController.destroy()
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Category
+* GET /category categoryController.index()
+* GET /category/search categoryController.getAlbums()
+* GET /category/:id categoryController.show()
 
-## Add your files
+Comment
+* GET /comment commentController.index()
+* POST /comment commentController.store()
+* PUT /comment/:id commentController.update()
+* PATCH /comment/:id commentController.patch()
+* DELETE /comment/:id commentController.destroy()
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Favorite
+* GET /favorite/verify favoriteController.verify()
+* GET /favorite favoriteController.index()
+* POST /favorite favoriteController.store()
+* DELETE /favorite favoriteController.destroy()
+* DELETE /favorite/:id favoriteController.deleteFavoritesByAlbumId()
 
-```
-cd existing_repo
-git remote add origin https://gitlab.informatika.org/if3110-2023-k02-02-41/kbl-rest.git
-git branch -M main
-git push -uf origin main
-```
+Rating
+* GET /rating ratingController.index()
+* POST /rating ratingController.modify()
+* DELETE /rating ratingController.destroy()
 
-## Integrate with your tools
+Subscription
+* POST /subscribe subscriptionController.request()
+* DELETE /subscribe subscriptionController.unsubscribe()
+* GET /subscribe subscriptionController.verify()
+* DELETE /subscribe/:id subscriptionController.deleteSubscriptionByAlbumId()
 
-- [ ] [Set up project integrations](https://gitlab.informatika.org/if3110-2023-k02-02-41/kbl-rest/-/settings/integrations)
+Token
+* POST /token/check tokenController.checkToken()
+* POST /token/addCoins tokenController.addCoins()
 
-## Collaborate with your team
+User
+* GET /user userController.index()
+* GET /user/check userController.check()
+* GET /user/admin userController.admin()
+* GET /user/emails userController.getEmailsByIds()
+* GET /user/me userController.me()
+* GET /user/:id userController.show()
+* POST /user/token userController.token()
+* POST /login userController.token()
+* POST /register userController.store()
+* POST /user/buy/:id userController.buyVideo()
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+Video
+* GET /video/:id videoController.show()
+* POST /video videoController.store()
+* PUT /video/:id videoController.update()
+* DELETE /video/:id videoController.destroy()
 
-## Test and Deploy
+## Pembagian Tugas
+* Fitur Redeem Token : 13521064
+* Fitur Search Album : 13521064, 13521108
+* Fitur Login/Register : 13521049, 13521108 
+* Fitur Pemberian Rating : 13521049
+* Fitur Video : 13521049
+* Fitur Comment : 13521049
+* Fitur Subscribe : 13521108
+* Fitur Favorite : 13521049
+* Fitur Category : 13521108
+* Fitur Album : 13521049
+* Fitur SoapCaller : 13521108
+* DB Core : 13521108, 13521049
+* Docker : 13521108
+* Caching : 13521108
 
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Credits
+This project is implemented by:
+1. Brian Kheng (13521049)
+2. Bill Clinton (13521064)
+3. Michael Leon Putra Widhi (13521108)
